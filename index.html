@@ -1,0 +1,2305 @@
+<!doctype html>
+<html lang="en-NZ">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Appendage Antics — Guided Tour</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800;900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   Tokens — lifted from the prototype's src/index.css so the guide
+   and the thing it documents read as one object.
+   ============================================================ */
+:root{
+  --font-sans:'Inter',ui-sans-serif,system-ui,sans-serif;
+  --font-display:'Cinzel','Times New Roman',serif;
+  --font-mono:'JetBrains Mono',ui-monospace,'Courier New',monospace;
+
+  --ink:#0b0b0d;
+  --night:#101014;
+  --surface:#16161a;
+  --raised:#1e1e24;
+  --hairline:rgba(242,237,228,.09);
+  --hairline-gold:rgba(255,215,130,.14);
+
+  --gold:#d4af37;
+  --gold-bright:#f0c75e;
+  --gold-pale:#fde08d;
+  --gold-deep:#8f6b29;
+
+  --cream:#f2ede4;
+  --dim:#9c978c;
+
+  --up:#4ade80;
+  --down:#f87171;
+  --pend:#fbbf24;
+
+  --vol1:#ff2e88;
+  --vol2:#d4af37;
+  --vol3:#e8dcb8;
+  --vol4:#2f7cff;
+  --vol5:#7cd332;
+
+  --shell:280px;
+  --measure:900px;
+}
+
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  background:var(--ink);
+  color:var(--cream);
+  font-family:var(--font-sans);
+  font-size:16px;
+  line-height:1.65;
+  -webkit-font-smoothing:antialiased;
+}
+::selection{background:var(--gold);color:var(--ink)}
+img{max-width:100%;display:block}
+a{color:var(--gold);text-decoration:none;border-bottom:1px solid rgba(212,175,55,.3)}
+a:hover{color:var(--gold-bright);border-bottom-color:rgba(212,175,55,.7)}
+h1,h2,h3,h4{font-family:var(--font-display);font-weight:700;line-height:1.15;margin:0}
+
+/* ---------- shared bits ---------- */
+.eyebrow{
+  font-family:var(--font-sans);font-size:11px;font-weight:600;
+  letter-spacing:.24em;text-transform:uppercase;color:var(--dim);
+}
+.eyebrow-gold{
+  font-family:var(--font-sans);font-size:11px;font-weight:600;
+  letter-spacing:.24em;text-transform:uppercase;color:var(--gold);
+}
+.gold-text{
+  color:var(--gold);
+  background:linear-gradient(105deg,#c9a13f 0%,#fde08d 38%,#f0c75e 55%,#df9f28 75%,#b8923f 100%);
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+}
+.gold-text-solid{color:var(--gold-bright)}
+.hairline{
+  height:1px;border:0;margin:0;
+  background:linear-gradient(90deg,transparent,rgba(212,175,55,.6),transparent);
+}
+.tabular{font-variant-numeric:tabular-nums}
+.mono{font-family:var(--font-mono);font-size:.85em}
+
+/* ============================================================
+   Shell — sticky contents rail + reading column
+   ============================================================ */
+.layout{display:flex;align-items:flex-start;gap:0}
+
+.rail{
+  position:sticky;top:0;flex:0 0 var(--shell);width:var(--shell);
+  height:100vh;overflow-y:auto;
+  border-right:1px solid var(--hairline);
+  background:var(--night);
+  padding:28px 0 40px;
+  scrollbar-width:thin;scrollbar-color:rgba(212,175,55,.35) transparent;
+}
+.rail::-webkit-scrollbar{width:6px}
+.rail::-webkit-scrollbar-track{background:transparent}
+.rail::-webkit-scrollbar-thumb{border-radius:3px;background:rgba(212,175,55,.3)}
+
+.rail-brand{padding:0 24px 22px;border-bottom:1px solid var(--hairline);margin-bottom:18px}
+.rail-brand .wordmark{
+  font-family:var(--font-display);font-weight:900;font-size:17px;
+  letter-spacing:.06em;text-transform:uppercase;
+}
+.rail-brand .sub{font-size:11px;color:var(--dim);letter-spacing:.18em;text-transform:uppercase;margin-top:6px}
+
+.rail nav{padding:0 12px}
+.rail .grp{
+  padding:16px 12px 7px;font-size:10px;font-weight:600;letter-spacing:.22em;
+  text-transform:uppercase;color:var(--dim);
+}
+.rail a{
+  display:block;padding:6px 12px;border-radius:3px;border:0;
+  color:var(--cream);font-size:13.5px;line-height:1.4;opacity:.78;
+}
+.rail a:hover{background:rgba(242,237,228,.05);opacity:1;color:var(--cream)}
+.rail a .rt{font-family:var(--font-mono);font-size:10.5px;color:var(--dim);display:block;margin-top:1px}
+
+.main{flex:1 1 auto;min-width:0;padding:0 48px 140px;display:flex;justify-content:center}
+.col{width:100%;max-width:var(--measure)}
+
+/* ============================================================
+   Cover
+   ============================================================ */
+.cover{
+  padding:120px 0 78px;text-align:center;
+  background:radial-gradient(1200px 600px at 50% -10%,rgba(212,175,55,.08),transparent 60%);
+  margin:0 -48px 0;
+}
+.cover h1{
+  font-size:clamp(38px,6vw,68px);font-weight:900;letter-spacing:.02em;
+  text-transform:uppercase;text-shadow:0 0 24px rgba(212,175,55,.35);
+  margin:16px 0 0;
+}
+.cover .lede{
+  max-width:620px;margin:26px auto 0;color:var(--dim);font-size:17px;
+}
+.cover .meta{
+  margin-top:36px;font-family:var(--font-mono);font-size:11.5px;
+  letter-spacing:.12em;text-transform:uppercase;color:var(--dim);
+}
+
+/* ============================================================
+   Panels & callouts
+   ============================================================ */
+.panel{
+  position:relative;background:var(--surface);
+  border:1px solid var(--hairline);
+  box-shadow:0 8px 40px rgba(0,0,0,.45);
+  padding:28px 30px;margin:34px 0;
+}
+.panel::before{content:'';position:absolute;inset:5px;border:1px solid rgba(242,237,228,.03);pointer-events:none}
+.panel-gold-hot{
+  border-color:rgba(212,175,55,.35);
+  box-shadow:0 8px 40px rgba(0,0,0,.45),0 0 0 1px rgba(212,175,55,.12),0 8px 40px rgba(212,175,55,.08);
+}
+.panel-gold-hot::before{border-color:rgba(212,175,55,.18)}
+.panel h3{font-size:19px;margin-bottom:10px}
+.panel > *:last-child{margin-bottom:0}
+
+.note{
+  border-left:2px solid var(--hairline);
+  padding:4px 0 4px 20px;margin:26px 0;color:var(--dim);font-size:15px;
+}
+.note strong{color:var(--cream);font-weight:600}
+.note.is-gold{border-left-color:rgba(212,175,55,.55)}
+
+/* ============================================================
+   Section headers
+   ============================================================ */
+.sect{padding-top:76px;scroll-margin-top:24px}
+.sect > .hairline{margin-bottom:34px}
+.sect-head{display:flex;gap:20px;align-items:baseline;margin-bottom:6px}
+.sect-num{
+  font-family:var(--font-mono);font-size:12px;color:var(--dim);
+  letter-spacing:.1em;flex:0 0 auto;padding-top:6px;
+}
+.sect h2{font-size:clamp(25px,3.4vw,34px);letter-spacing:.02em;text-transform:uppercase}
+.sect h3{font-size:20px;margin:38px 0 10px;letter-spacing:.02em}
+.route{
+  display:inline-block;font-family:var(--font-mono);font-size:12px;
+  color:var(--gold);background:rgba(212,175,55,.07);
+  border:1px solid var(--hairline-gold);border-radius:3px;
+  padding:2px 9px;margin-top:12px;letter-spacing:.04em;
+}
+.sect p{margin:16px 0;color:var(--cream);opacity:.92}
+.sect p.lede{font-size:17.5px;opacity:1;color:var(--cream)}
+
+/* part divider */
+.part{padding-top:104px;scroll-margin-top:24px}
+.part-inner{
+  border:1px solid var(--hairline-gold);background:var(--night);
+  padding:34px 36px;position:relative;
+}
+.part-inner h2{
+  font-size:clamp(27px,4vw,40px);font-weight:900;letter-spacing:.03em;
+  text-transform:uppercase;margin-top:10px;
+}
+.part-inner p{margin:14px 0 0;color:var(--dim);max-width:66ch}
+
+/* ============================================================
+   Screenshot frames
+   ============================================================ */
+figure.shot{margin:30px 0 34px}
+.shot .frame{
+  border:1px solid var(--hairline);background:var(--night);
+  box-shadow:0 8px 40px rgba(0,0,0,.5);
+}
+.shot .bar{
+  display:flex;align-items:center;gap:9px;
+  padding:9px 13px;border-bottom:1px solid var(--hairline);
+  background:#0e0e12;
+}
+.shot .dots{display:flex;gap:6px;flex:0 0 auto}
+.shot .dots i{width:9px;height:9px;border-radius:50%;background:rgba(242,237,228,.14);display:block}
+.shot .addr{
+  font-family:var(--font-mono);font-size:11px;color:var(--dim);
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+.shot .frame img{width:100%;height:auto}
+.shot figcaption{
+  margin-top:11px;font-size:13.5px;color:var(--dim);line-height:1.55;
+  padding-left:2px;
+}
+.shot figcaption b{color:var(--cream);font-weight:600}
+
+/* Whole-page captures run 8,000–12,600px tall. Shown at full height one of
+   them would be six screens of scrolling before the next paragraph, so they
+   sit in a fixed-height port and scroll inside it. */
+.shot.tall .scrollport{
+  max-height:min(62vh,620px);overflow-y:auto;overscroll-behavior:contain;
+  scrollbar-width:thin;scrollbar-color:rgba(212,175,55,.35) transparent;
+}
+.shot.tall .scrollport::-webkit-scrollbar{width:8px}
+.shot.tall .scrollport::-webkit-scrollbar-track{background:rgba(0,0,0,.3)}
+.shot.tall .scrollport::-webkit-scrollbar-thumb{border-radius:4px;background:rgba(212,175,55,.35)}
+.shot.tall .scrollport::-webkit-scrollbar-thumb:hover{background:rgba(212,175,55,.6)}
+.shot .scrollhint{
+  display:inline-flex;align-items:center;gap:7px;margin-left:auto;
+  font-family:var(--font-sans);font-size:9.5px;font-weight:600;
+  letter-spacing:.18em;text-transform:uppercase;color:var(--gold-deep);
+  flex:0 0 auto;
+}
+
+/* placeholder until captures land */
+.shot .pending{
+  aspect-ratio:16/10;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:10px;
+  background:
+    repeating-linear-gradient(135deg,transparent,transparent 11px,rgba(242,237,228,.022) 11px,rgba(242,237,228,.022) 22px),
+    var(--surface);
+  color:var(--dim);text-align:center;padding:24px;
+}
+.shot .pending .tag{
+  font-family:var(--font-sans);font-size:10px;font-weight:600;
+  letter-spacing:.24em;text-transform:uppercase;color:var(--gold-deep);
+}
+.shot .pending .fn{font-family:var(--font-mono);font-size:12px;color:var(--dim)}
+
+/* ============================================================
+   Feature lists
+   ============================================================ */
+.walk{list-style:none;margin:22px 0;padding:0;counter-reset:walk}
+.walk li{
+  counter-increment:walk;position:relative;
+  padding:0 0 0 42px;margin:0 0 16px;color:var(--cream);opacity:.92;
+}
+.walk li::before{
+  content:counter(walk,decimal-leading-zero);
+  position:absolute;left:0;top:1px;
+  font-family:var(--font-mono);font-size:11.5px;color:var(--gold-deep);
+  letter-spacing:.06em;
+}
+.walk li b{color:var(--cream);font-weight:600;opacity:1}
+
+.plain{margin:18px 0;padding-left:22px;color:var(--cream);opacity:.92}
+.plain li{margin-bottom:9px}
+.plain li::marker{color:var(--gold-deep)}
+
+/* key/value strip */
+.kv{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+  gap:1px;background:var(--hairline);border:1px solid var(--hairline);margin:26px 0;
+}
+.kv div{background:var(--surface);padding:15px 17px}
+.kv dt{font-size:10px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--dim)}
+.kv dd{margin:6px 0 0;font-family:var(--font-display);font-size:20px;font-weight:700;color:var(--cream)}
+
+footer.end{
+  margin-top:110px;padding-top:34px;border-top:1px solid var(--hairline);
+  color:var(--dim);font-size:13px;
+}
+
+/* ============================================================
+   Responsive — the rail collapses to a plain block on narrow screens
+   ============================================================ */
+@media (max-width:1080px){
+  .layout{display:block}
+  .rail{position:static;width:auto;height:auto;border-right:0;border-bottom:1px solid var(--hairline)}
+  .main{padding:0 22px 100px}
+  .cover{margin:0 -22px}
+}
+@media print{
+  .rail{display:none}
+  body{background:#fff;color:#111}
+  .shot .frame{box-shadow:none}
+}
+</style>
+</head>
+<body>
+
+<div class="layout">
+
+  <!-- ======================= CONTENTS RAIL ======================= -->
+  <aside class="rail">
+    <div class="rail-brand">
+      <div class="wordmark gold-text-solid">Appendage Antics</div>
+      <div class="sub">Guided tour</div>
+    </div>
+    <nav>
+      <a href="#cover">Front cover</a>
+      <a href="#how-to-read">How to read this</a>
+      <a href="#doorway">The doorway<span class="rt">age gate &amp; cookies</span></a>
+
+      <div class="grp">Part one — the public site</div>
+      <a href="#home">Home<span class="rt">/</span></a>
+      <a href="#books">The Series<span class="rt">/books</span></a>
+      <a href="#vol1">Volume One<span class="rt">/books/vol-1</span></a>
+      <a href="#vols">Volumes Two to Five<span class="rt">/books/vol-2</span></a>
+      <a href="#memberships">Memberships<span class="rt">/memberships</span></a>
+      <a href="#competition">The Competition<span class="rt">/competition</span></a>
+      <a href="#gallery">The Gallery<span class="rt">/gallery</span></a>
+      <a href="#entry">A single entry<span class="rt">/entry/:id</span></a>
+      <a href="#leaderboard">The Leaderboard<span class="rt">/leaderboard</span></a>
+      <a href="#promo">Opening Campaign<span class="rt">/promo</span></a>
+      <a href="#about">About<span class="rt">/about</span></a>
+      <a href="#faq">FAQ<span class="rt">/faq</span></a>
+      <a href="#contact">Contact<span class="rt">/contact</span></a>
+      <a href="#legal">Legal &amp; Compliance<span class="rt">/legal</span></a>
+      <a href="#join">Joining &amp; signing in<span class="rt">/register · /login</span></a>
+      <a href="#cart">The cart<span class="rt">drawer</span></a>
+      <a href="#notfound">Wrong turns<span class="rt">404</span></a>
+
+      <div class="grp">Part two — the Members' Lounge</div>
+      <a href="#dashboard">The Dashboard<span class="rt">/dashboard</span></a>
+      <a href="#upload">Upload an entry<span class="rt">/upload</span></a>
+      <a href="#l-campaign">Campaign progress<span class="rt">/dashboard/campaign</span></a>
+      <a href="#l-rankings">My Rankings<span class="rt">/dashboard/rankings</span></a>
+      <a href="#l-entries">My Entries<span class="rt">/dashboard/entries</span></a>
+      <a href="#l-votes">My Votes<span class="rt">/dashboard/votes</span></a>
+      <a href="#l-comments">My Comments<span class="rt">/dashboard/comments</span></a>
+      <a href="#l-library">My Library<span class="rt">/dashboard/library</span></a>
+      <a href="#l-editing">Editing Orders<span class="rt">/dashboard/editing</span></a>
+      <a href="#l-membership">My Membership<span class="rt">/dashboard/membership</span></a>
+      <a href="#l-payments">Payment History<span class="rt">/dashboard/payments</span></a>
+      <a href="#l-proof">Proof of Purchase<span class="rt">/dashboard/proof</span></a>
+      <a href="#l-notifications">Notifications<span class="rt">/dashboard/notifications</span></a>
+      <a href="#l-profile">My Profile<span class="rt">/dashboard/profile</span></a>
+      <a href="#l-settings">Settings<span class="rt">/dashboard/settings</span></a>
+
+      <div class="grp">Part three — the Control Room</div>
+      <a href="#admin">Staff overview<span class="rt">/admin</span></a>
+      <a href="#a-users">Members<span class="rt">/admin/users</span></a>
+      <a href="#a-moderation">Moderation queue<span class="rt">/admin/moderation</span></a>
+      <a href="#a-originals">Originals Vault<span class="rt">/admin/originals</span></a>
+      <a href="#a-editing">Editing Desk<span class="rt">/admin/editing</span></a>
+      <a href="#a-judging">Judging<span class="rt">/admin/judging</span></a>
+      <a href="#a-prizes">Prizes<span class="rt">/admin/prizes</span></a>
+      <a href="#a-promos">Promotions<span class="rt">/admin/promos</span></a>
+      <a href="#a-reports">Reports<span class="rt">/admin/reports</span></a>
+      <a href="#a-support">Support Desk<span class="rt">/admin/support</span></a>
+      <a href="#a-comms">Communications<span class="rt">/admin/communications</span></a>
+      <a href="#a-revenue">Revenue Model<span class="rt">/admin/revenue</span></a>
+
+      <div class="grp">Closing</div>
+      <a href="#whats-real">What's real, what's illustrative</a>
+      <a href="#next">Where this could go next</a>
+    </nav>
+  </aside>
+
+  <!-- ======================= CONTENT ======================= -->
+  <main class="main">
+  <div class="col">
+
+    <!-- ---------------- COVER ---------------- -->
+    <header class="cover" id="cover">
+      <div class="eyebrow-gold">A guided tour of the prototype</div>
+      <h1 class="gold-text">Appendage&nbsp;Antics</h1>
+      <p class="lede">
+        Every screen that has been built, what it is for, and how the pieces fit
+        together — the e-book series, the competition, and the membership tiers,
+        working as one platform.
+      </p>
+      <div class="meta">Prepared for Zara &middot; August 2026</div>
+    </header>
+
+    <!-- ---------------- HOW TO READ ---------------- -->
+    <section class="sect" id="how-to-read">
+      <hr class="hairline">
+      <div class="sect-head">
+        <div class="sect-num">00</div>
+        <div><div class="eyebrow">Before you start</div><h2>How to read this</h2></div>
+      </div>
+
+      <p class="lede">
+        This is a working prototype of Appendage Antics — a clickable model of the
+        whole platform, built so you can see the idea rather than imagine it.
+      </p>
+
+      <p>
+        Everything in the pages that follow is real in the sense that matters: you can
+        click it, move through it, and see how a member would experience the thing end
+        to end. What sits behind it is not. There are no payments, no video hosting and
+        no identity checks wired up — those are the parts that need a bank, a vendor and
+        a budget, and they are named honestly on screen wherever you would expect them.
+      </p>
+
+      <p>
+        The tour runs in three parts, in the order a real person meets them: the
+        <b>public site</b> anyone can browse, the <b>Members' Lounge</b> behind the
+        paywall, and the <b>Control Room</b> your staff would run the operation from.
+      </p>
+
+      <div class="panel panel-gold-hot">
+        <div class="eyebrow-gold">Try it yourself</div>
+        <h3 style="margin-top:8px">The prototype is live — go and click it</h3>
+        <p style="margin:12px 0 0;color:var(--dim)">
+          Reading about it is the slow way round. Every screen in this tour is a real page
+          you can open, and nothing you do in there can break anything.
+        </p>
+        <p style="margin:18px 0 0">
+          <a href="prototype/" style="display:inline-block;border:0;padding:13px 26px;
+             font-family:var(--font-display);font-weight:700;letter-spacing:.12em;
+             text-transform:uppercase;font-size:14px;color:#0b0b0d;
+             border:1px solid rgba(253,224,141,.7);
+             background:linear-gradient(180deg,#fde08d 0%,#d4af37 45%,#a8842c 100%);
+             box-shadow:0 0 0 1px rgba(143,107,41,.9),0 4px 18px rgba(212,175,55,.25)">
+            Open the prototype →
+          </a>
+        </p>
+        <p style="margin:14px 0 0;font-size:13px;color:var(--dim)">
+          It opens in the same window — use your browser's back button to return here.
+          You will meet an age check first; that is the platform doing its job.
+        </p>
+      </div>
+
+      <div class="note is-gold">
+        <strong>On the content.</strong> Your material is used as you supplied it — the
+        brand, both award shows, the book titles, the tier names and prices, the prize
+        board, the division structure. Everything else — the members, the entries, the
+        comments, the statistics, the staff — is invented to make the screens feel
+        inhabited. None of those people exist.
+      </div>
+    </section>
+
+    <!-- ---------------- THE DOORWAY ---------------- -->
+    <section class="sect" id="doorway">
+      <hr class="hairline">
+      <div class="sect-head">
+        <div class="sect-num">01</div>
+        <div><div class="eyebrow">First contact</div><h2>The doorway</h2></div>
+      </div>
+
+      <p class="lede">
+        Two things happen before anyone sees a single page, and both exist because the
+        platform is R18.
+      </p>
+
+      <figure class="shot">
+        <div class="frame">
+          <div class="bar"><span class="dots"><i></i><i></i><i></i></span><span class="addr">appendageantics.co.nz</span></div>
+          <img src="img/00-age-gate.webp" alt="The age gate. First visit only — it remembers the answer for the rest of the session." width="1800" height="1125" loading="lazy" decoding="async">
+        </div>
+        <figcaption><b>The age gate.</b> First visit only — it remembers the answer for the rest of the session.</figcaption>
+      </figure>
+
+      <p>
+        The age gate is a hard stop, not a banner. Nothing behind it renders until it is
+        answered, which is what an R18 platform is expected to do and what a payment
+        provider will ask you to demonstrate.
+      </p>
+
+      <div class="note">
+        <strong>Worth being straight about:</strong> a self-declared date of birth is the
+        prototype's stand-in for real age verification. A live R18 platform taking card
+        payments would use a third-party verification service, and that is a real line
+        item. The screen says so rather than pretending otherwise.
+      </div>
+
+      <figure class="shot">
+        <div class="frame">
+          <div class="bar"><span class="dots"><i></i><i></i><i></i></span><span class="addr">appendageantics.co.nz</span></div>
+          <img src="img/00-cookie-banner.webp" alt="The cookie choice. Essential-only and accept-all are both one click; neither is disguised." width="1800" height="1125" loading="lazy" decoding="async">
+        </div>
+        <figcaption><b>The cookie choice.</b> Essential-only and accept-all are both one click; neither is disguised.</figcaption>
+      </figure>
+    </section>
+
+    <!-- =============================================================
+         PART ONE
+         ============================================================= -->
+    <section class="part" id="part-public">
+      <div class="part-inner">
+        <div class="eyebrow-gold">Part one</div>
+        <h2>The public site</h2>
+        <p>
+          What anyone can see without paying: the books, the competition, the prize
+          board, the live gallery and the tiers. Its whole job is to turn a curious
+          visitor into a Volume One buyer — because buying the book is what opens the
+          door to everything else.
+        </p>
+      </div>
+    </section>
+
+    <!-- ---------------- HOME ---------------- -->
+    <section class="sect" id="home">
+      <hr class="hairline">
+      <div class="sect-head">
+        <div class="sect-num">02</div>
+        <div>
+          <div class="eyebrow">Part one · the public site</div>
+          <h2>Home</h2>
+          <span class="route">/</span>
+        </div>
+      </div>
+
+      <p class="lede">
+        The front page has one job: explain a fairly unusual proposition in about eight
+        seconds, and point at the one action that starts everything.
+      </p>
+
+      <figure class="shot">
+        <div class="frame">
+          <div class="bar"><span class="dots"><i></i><i></i><i></i></span><span class="addr">appendageantics.co.nz/#/</span></div>
+          <img src="img/01-home-fold.webp" alt="The opening view. One headline, one primary action, and the prize figure doing the persuading." width="1800" height="1125" loading="lazy" decoding="async">
+        </div>
+        <figcaption><b>The opening view.</b> One headline, one primary action, and the prize figure doing the persuading.</figcaption>
+      </figure>
+
+      <p>
+        The proposition is genuinely three things at once — a book series, a video
+        competition and a membership — and that is a lot to land at once. So the page
+        introduces them in dependency order rather than importance order: the book comes
+        first because it is the cheapest thing to say yes to and it is the key to the
+        rest.
+      </p>
+
+      <ol class="walk">
+        <li><b>The hero.</b> The brand, the promise, and a single gold call to action. Only one button on this screen is gold; everything else is deliberately quieter, so the eye has somewhere to land.</li>
+        <li><b>How it works.</b> Buy Volume One → get your two accounts → upload your entries → climb the ladder. Four steps, because the mechanic is unusual enough that it needs stating plainly.</li>
+        <li><b>The prize board.</b> The money, up front. This is the single most persuasive fact on the site and it is not buried.</li>
+        <li><b>Live from the gallery.</b> A handful of recent entries, so the platform looks inhabited rather than empty on day one.</li>
+        <li><b>The tiers, in brief.</b> Enough to show there is a ladder, with the detail deferred to the Memberships page.</li>
+      </ol>
+
+      <figure class="shot tall">
+        <div class="frame">
+          <div class="bar">
+            <span class="dots"><i></i><i></i><i></i></span>
+            <span class="addr">appendageantics.co.nz/#/</span>
+            <span class="scrollhint">Scroll inside ↓</span>
+          </div>
+          <div class="scrollport">
+            <img src="img/01-home-full.webp" alt="The complete home page, top to bottom." width="1800" height="8014" loading="lazy" decoding="async">
+          </div>
+        </div>
+        <figcaption><b>The whole page, top to bottom.</b> Scroll inside the frame to see how the five sections hand over to each other.</figcaption>
+      </figure>
+
+      <div class="note">
+        <strong>A note on restraint.</strong> Gold is used sparingly on purpose — for the
+        hero, the prize numbers and the winners' podium, and almost nowhere else. Applied
+        to everything it stops reading as premium and starts reading as noisy; held back,
+        it makes the prize board feel like the prize board.
+      </div>
+    </section>
+
+    <!-- ---------------- BOOKS ---------------- -->
+    <section class="sect" id="books">
+      <hr class="hairline">
+      <div class="sect-head">
+        <div class="sect-num">03</div>
+        <div><div class="eyebrow">Part one · the public site</div><h2>The Series</h2><span class="route">/books</span></div>
+      </div>
+      <figure class="shot">
+        <div class="frame">
+          <div class="bar"><span class="dots"><i></i><i></i><i></i></span><span class="addr">appendageantics.co.nz/#/books</span></div>
+          <img src="img/02-books.webp" alt="All five volumes. Each carries its own accent colour, used consistently wherever that volume appears." width="1800" height="1125" loading="lazy" decoding="async">
+        </div>
+        <figcaption><b>All five volumes.</b> Each carries its own accent colour, used consistently wherever that volume appears.</figcaption>
+      </figure>
+
+      <p class="lede">
+        The series page has to do something slightly awkward: sell five books while making
+        it unmistakable that only one of them is the way in.
+      </p>
+
+      <p>
+        All five volumes are shown as equals in the grid — same treatment, same weight, each
+        with its own accent colour that follows it everywhere else on the platform. But
+        Volume One carries a badge the others do not, and the page says outright that Season
+        One of the Awards is judged entirely from Volume One. Someone who buys Volume Four
+        first because they liked the cover has not made a mistake, but they have not bought
+        their way into the competition either, and finding that out later is a refund.
+      </p>
+
+      <ol class="walk">
+        <li><b>The collection.</b> Five covers, five prices, add-to-cart on each. A reader can start anywhere, and the page says so.</li>
+        <li><b>The bundle.</b> All five at a saving — the obvious upsell, given a reader who wants one usually wants the set.</li>
+        <li><b>The competition tie-in.</b> A panel restating that Volume One unlocks entry, with the current phase and the voting deadline live on it.</li>
+        <li><b>What the series actually is.</b> Four short claims — interactive, competitive, communal, and strictly 18+ — because "comedy e-book" undersells a book whose challenges you film.</li>
+      </ol>
+
+      <div class="note">
+        <strong>On the covers.</strong> These are your artwork, cropped to a consistent
+        shape so the grid reads as a set. Text-free re-exports would let them sit even
+        cleaner — that is on the short list of assets Mark will ask you for.
+      </div>
+    </section>
+
+    <!-- ---------------- VOL 1 ---------------- -->
+    <section class="sect" id="vol1">
+      <hr class="hairline">
+      <div class="sect-head">
+        <div class="sect-num">04</div>
+        <div><div class="eyebrow">Part one · the public site</div><h2>Volume One</h2><span class="route">/books/vol-1</span></div>
+      </div>
+      <figure class="shot">
+        <div class="frame">
+          <div class="bar"><span class="dots"><i></i><i></i><i></i></span><span class="addr">appendageantics.co.nz/#/books/vol-1</span></div>
+          <img src="img/03-vol1.webp" alt="The way in. Volume One gets the fullest treatment on the site, because it is the purchase everything else depends on." width="1800" height="1125" loading="lazy" decoding="async">
+        </div>
+        <figcaption><b>The way in.</b> Volume One gets the fullest treatment on the site, because it is the purchase everything else depends on.</figcaption>
+      </figure>
+
+      <p class="lede">
+        This is the most important page on the public site, and it is built like it. Every
+        other page is ultimately trying to get someone here.
+      </p>
+
+      <p>
+        The page assumes a visitor who is interested but not yet convinced, and works
+        through the three things standing between them and a purchase: what is actually in
+        the book, whether it is any good, and what buying it gets them beyond the reading.
+      </p>
+
+      <ol class="walk">
+        <li><b>Sample challenges.</b> Three of the fifty-two, shown in full. The rest stay sealed. Showing nothing asks for blind trust; showing everything removes the reason to buy — three is enough to prove the tone is funny rather than crude.</li>
+        <li><b>What you're in for.</b> The shape of the book: how many challenges, how they escalate, how they are meant to be used.</li>
+        <li><b>Reader verdicts.</b> Social proof, kept short and specific.</li>
+        <li><b>The competition unlock.</b> The purchase is not just a book — it is a ticket, two member accounts, and eligibility for the cashback campaign. Stated here rather than left for the buyer to discover.</li>
+        <li><b>The rest of the series.</b> The onward path, once the important decision has been made.</li>
+      </ol>
+
+      <div class="note is-gold">
+        <strong>Why the sample challenges matter more than they look.</strong> This is the
+        only place on the public site where a visitor sees your actual writing. The whole
+        proposition rests on the book being genuinely funny, and this is where that gets
+        proved or lost — worth choosing those three with some care before launch.
+      </div>
+    </section>
+
+    <!-- ---------------- VOLS 2-5 ---------------- -->
+    <section class="sect" id="vols">
+      <hr class="hairline">
+      <div class="sect-head">
+        <div class="sect-num">05</div>
+        <div><div class="eyebrow">Part one · the public site</div><h2>Volumes Two to Five</h2><span class="route">/books/vol-2</span></div>
+      </div>
+      <figure class="shot">
+        <div class="frame">
+          <div class="bar"><span class="dots"><i></i><i></i><i></i></span><span class="addr">appendageantics.co.nz/#/books/vol-2</span></div>
+          <img src="img/04-vol2.webp" alt="The later volumes. A lighter template, since the selling has already been done by Volume One." width="1800" height="1125" loading="lazy" decoding="async">
+        </div>
+        <figcaption><b>The later volumes.</b> A lighter template, since the selling has already been done by Volume One.</figcaption>
+      </figure>
+
+      <p class="lede">
+        Volumes Two through Five share one page design, filled from each book's own
+        details — cover, accent colour, challenge count, three sample challenges.
+      </p>
+
+      <p>
+        They are deliberately lighter than Volume One. Someone reading about Volume Four
+        has almost certainly already bought Volume One; they do not need the competition
+        explained again, they need to know what is in this book and how to get it. Repeating
+        the full pitch on all five pages would dilute the one page that has to convert.
+      </p>
+
+      <div class="note">
+        <strong>A small thing worth flagging.</strong> Volume Five appears as
+        <em>Champion of Chaos</em> on one of your posters and <em>Hall of Fame Antics</em> on
+        your series page. The prototype uses one of them consistently — but the two names are
+        both out there, and picking one is yours to do.
+      </div>
+    </section>
+
+    <!-- ---------------- MEMBERSHIPS ---------------- -->
+    <section class="sect" id="memberships">
+      <hr class="hairline">
+      <div class="sect-head">
+        <div class="sect-num">06</div>
+        <div>
+          <div class="eyebrow">Part one · the public site</div>
+          <h2>Memberships</h2>
+          <span class="route">/memberships</span>
+        </div>
+      </div>
+
+      <p class="lede">
+        Eight tiers across two divisions, and the page's real job is to make choosing
+        between them feel obvious rather than exhausting.
+      </p>
+
+      <figure class="shot">
+        <div class="frame">
+          <div class="bar"><span class="dots"><i></i><i></i><i></i></span><span class="addr">appendageantics.co.nz/#/memberships</span></div>
+          <img src="img/05-memberships.webp" alt="The tier ladder. Blokes and Gals are a tab, not two separate pages — so a visitor never has to go back to compare." width="1800" height="1125" loading="lazy" decoding="async">
+        </div>
+        <figcaption><b>The tier ladder.</b> Blokes and Gals are a tab, not two separate pages — so a visitor never has to go back to compare.</figcaption>
+      </figure>
+
+      <p>
+        Your two divisions are handled as a switch at the top of the page rather than as
+        separate destinations. It keeps one clean URL to advertise, and it means somebody
+        who lands on the wrong division is one click from the right one instead of lost.
+      </p>
+
+      <p>
+        Each tier card carries its name, its monthly price, the total across the six-month
+        commitment, and what the tier actually unlocks. That total is worth stating plainly:
+        a monthly figure alone quietly understates what someone is signing up for, and a
+        member who feels ambushed at month three is a refund request, not a member.
+      </p>
+
+      <div class="note">
+        <strong>Two things in your pricing worth a conversation.</strong> They are yours to
+        rule on, not ours to change, so the prototype reproduces them exactly as your store
+        has them — but they are the sort of thing a sharp customer notices, and Mark will
+        raise both with you separately.
+      </div>
+
+      <p>
+        The page ends with the questions that otherwise become support tickets: when billing
+        starts, what the six-month commitment means, how to change tier, and what happens at
+        the end of a term. Answering them here costs a little momentum. Not answering them
+        costs refunds, which are considerably more expensive.
+      </p>
+
+      <figure class="shot tall">
+        <div class="frame">
+          <div class="bar">
+            <span class="dots"><i></i><i></i><i></i></span>
+            <span class="addr">appendageantics.co.nz/#/memberships</span>
+            <span class="scrollhint">Scroll inside ↓</span>
+          </div>
+          <div class="scrollport">
+            <img src="img/05-memberships-full.webp" alt="The complete Memberships page, including the full tier ladder and the billing questions." width="1800" height="9853" loading="lazy" decoding="async">
+          </div>
+        </div>
+        <figcaption><b>The full ladder.</b> Worth scrolling — this is the page that has to make an eight-tier decision feel like a two-tier one.</figcaption>
+      </figure>
+
+      <div class="note">
+        <strong>What is not real here.</strong> Choosing a tier adds it to a cart and the
+        cart totals correctly, but no payment is taken and no card details are asked for.
+        A live platform needs a payment provider willing to handle R18 content, which is a
+        real conversation with real rates attached.
+      </div>
+    </section>
+
+    <!-- ---------------- COMPETITION ---------------- -->
+    <section class="sect" id="competition">
+      <hr class="hairline">
+      <div class="sect-head">
+        <div class="sect-num">07</div>
+        <div><div class="eyebrow">Part one · the public site</div><h2>The Competition</h2><span class="route">/competition</span></div>
+      </div>
+      <figure class="shot">
+        <div class="frame">
+          <div class="bar"><span class="dots"><i></i><i></i><i></i></span><span class="addr">appendageantics.co.nz/#/competition</span></div>
+          <img src="img/06-competition.webp" alt="Rules, prize board and the calendar — the whole 24-month structure on one page." width="1800" height="1125" loading="lazy" decoding="async">
+        </div>
+        <figcaption><b>Rules, prize board and the calendar</b> — the whole 24-month structure on one page.</figcaption>
+      </figure>
+
+      <p class="lede">
+        The competition is the most structurally complicated part of the whole proposition,
+        and this page exists to make it feel simple.
+      </p>
+
+      <p>
+        The complication is that there are two different things people call "divisions."
+        Blokes and Gals are <em>what you enter</em> — two award shows, each with its own
+        host and its own trophy cabinet. Public and Private are <em>how you enter</em> —
+        in the open, or with your identity sealed behind the gold censor bars. Those are
+        independent choices, and conflating them is the fastest way to lose a reader.
+      </p>
+
+      <p>
+        So the page states it in exactly that form, in one line, before showing anything
+        else: <em>Blokes and Gals are what you enter; Public or Private is how you enter it.</em>
+      </p>
+
+      <ol class="walk">
+        <li><b>How it works.</b> Five steps from buying Volume One to standing on a podium.</li>
+        <li><b>Entry requirements.</b> Short list, hard rules — verified adult, proof of purchase, your own footage, nothing explicit.</li>
+        <li><b>The two divisions.</b> The Public/Private choice explained as a genuine choice rather than a setting, because for a lot of your likely entrants it is the difference between entering and not.</li>
+        <li><b>The full prize board.</b> Every placing in both shows, plus the overall honours.</li>
+        <li><b>The calendar.</b> Where we are now, when voting closes, and when the gala runs.</li>
+      </ol>
+
+      <figure class="shot tall">
+        <div class="frame">
+          <div class="bar">
+            <span class="dots"><i></i><i></i><i></i></span>
+            <span class="addr">appendageantics.co.nz/#/competition</span>
+            <span class="scrollhint">Scroll inside ↓</span>
+          </div>
+          <div class="scrollport">
+            <img src="img/06-competition-full.webp" alt="The complete Competition page, including the full prize board and the calendar." width="1800" height="12654" loading="lazy" decoding="async">
+          </div>
+        </div>
+        <figcaption><b>The entire competition on one page</b> — rules, both divisions, the full prize board and the calendar. The longest page on the site, and deliberately so.</figcaption>
+      </figure>
+
+      <div class="note is-gold">
+        <strong>The timing point that needed care.</strong> The competition runs a full
+        24 months, but the first gala falls well inside that window. So the page is explicit
+        that the gala hands over <em>Season One placings</em> — and that the overall
+        champion, the one with the $4,000 attached, is judged across the entire competition
+        and therefore settled only when the window closes. A prize board that appeared to
+        award the big one early would be a genuine problem later, with entrants who had
+        every right to be annoyed.
+      </div>
+    </section>
+
+    <!-- ---------------- GALLERY ---------------- -->
+    <section class="sect" id="gallery">
+      <hr class="hairline">
+      <div class="sect-head">
+        <div class="sect-num">08</div>
+        <div><div class="eyebrow">Part one · the public site</div><h2>The Gallery</h2><span class="route">/gallery</span></div>
+      </div>
+      <figure class="shot">
+        <div class="frame">
+          <div class="bar"><span class="dots"><i></i><i></i><i></i></span><span class="addr">appendageantics.co.nz/#/gallery</span></div>
+          <img src="img/07-gallery.webp" alt="Entries as gold &quot;CLASSIFIED&quot; cards. Nothing explicit is ever shown — the joke does the work." width="1800" height="1125" loading="lazy" decoding="async">
+        </div>
+        <figcaption><b>Entries as gold "CLASSIFIED" cards.</b> Nothing explicit is ever shown — the joke does the work.</figcaption>
+      </figure>
+
+      <p class="lede">
+        The gallery is where the platform proves it is alive — and where the paywall does
+        its most important work.
+      </p>
+
+      <p>
+        Every entry appears as a card. Some are free to watch; most are behind a gold
+        censor bar. That split is the entire commercial argument for a membership, made
+        visually rather than in a sentence: a visitor can see there is a great deal here,
+        and see precisely what they are not getting.
+      </p>
+
+      <ol class="walk">
+        <li><b>Filters that work.</b> Division, challenge category, and a free-to-watch toggle — all of which really filter, with a running count of what is showing.</li>
+        <li><b>Sorting.</b> Most votes, newest, most discussed.</li>
+        <li><b>The locked count.</b> A line stating how many of the entries on screen are behind the rope — and it recounts when a filter is applied, rather than repeating a site-wide figure that no longer matches what is visible.</li>
+        <li><b>An empty state with a joke in it.</b> Filter down to nothing and the page has something to say rather than going blank.</li>
+      </ol>
+
+      <div class="note">
+        <strong>The censor bars are the brand, not a workaround.</strong> Nothing explicit
+        appears anywhere on this platform — the humour is entirely innuendo. The gold
+        "CLASSIFIED" treatment turns that constraint into the house style, and it is what
+        lets the site be genuinely funny while staying something a payment provider will
+        touch.
+      </div>
+    </section>
+
+    <!-- ---------------- ENTRY ---------------- -->
+    <section class="sect" id="entry">
+      <hr class="hairline">
+      <div class="sect-head">
+        <div class="sect-num">09</div>
+        <div><div class="eyebrow">Part one · the public site</div><h2>A single entry</h2><span class="route">/entry/:id</span></div>
+      </div>
+      <figure class="shot">
+        <div class="frame">
+          <div class="bar"><span class="dots"><i></i><i></i><i></i></span><span class="addr">appendageantics.co.nz/#/entry/tt-001</span></div>
+          <img src="img/08-entry.webp" alt="One entry in full — votes, score, comments, and the paywall doing its job." width="1800" height="1125" loading="lazy" decoding="async">
+        </div>
+        <figcaption><b>One entry in full</b> — votes, score, comments, and the paywall doing its job.</figcaption>
+      </figure>
+
+      <p class="lede">
+        Click any card and you land here: one entry, its entrant, its score, and the
+        conversation around it.
+      </p>
+
+      <p>
+        This page is where a casual visitor is most likely to convert, because it is where
+        the paywall stops being an abstraction. The entry is visible. The comments are
+        roped off. The voting paddle is not theirs. Each of those is a specific, felt
+        absence rather than a marketing claim about membership benefits.
+      </p>
+
+      <ol class="walk">
+        <li><b>The entry itself</b> — title, entrant, challenge category, division, and how long it has been up.</li>
+        <li><b>Score and votes.</b> Vote counts are themselves a tier perk, so a lower-tier member sees the entry but not the numbers — the gating is layered rather than binary.</li>
+        <li><b>The comment thread</b>, with a clearly-explained rope across it for anyone not entitled to join in.</li>
+        <li><b>More from the gallery</b> — because the goal is a second click, then a third.</li>
+      </ol>
+
+      <div class="note">
+        <strong>What is standing in for video.</strong> There is no player here. Video
+        hosting, transcoding and streaming for an R18 UGC platform is a substantial ongoing
+        cost that scales with success, and it is the single largest thing the prototype
+        cannot fake. The placeholder is honest about being one.
+      </div>
+    </section>
+
+    <!-- ---------------- LEADERBOARD ---------------- -->
+    <section class="sect" id="leaderboard">
+      <hr class="hairline">
+      <div class="sect-head">
+        <div class="sect-num">10</div>
+        <div><div class="eyebrow">Part one · the public site</div><h2>The Leaderboard</h2><span class="route">/leaderboard</span></div>
+      </div>
+      <figure class="shot">
+        <div class="frame">
+          <div class="bar"><span class="dots"><i></i><i></i><i></i></span><span class="addr">appendageantics.co.nz/#/leaderboard</span></div>
+          <img src="img/09-leaderboard.webp" alt="The podium and the ladder. Public and Private divisions rank separately." width="1800" height="1125" loading="lazy" decoding="async">
+        </div>
+        <figcaption><b>The podium and the ladder.</b> Public and Private divisions rank separately.</figcaption>
+      </figure>
+
+      <p class="lede">
+        Standings for both divisions, updated as votes come in — and the page that gives
+        members a reason to come back daily.
+      </p>
+
+      <p>
+        A leaderboard is the cheapest retention mechanic there is. Someone in fourth place
+        checks whether they are still in fourth place, and they check often. The podium at
+        the top gets the full gold treatment because that is the aspiration the whole page
+        is selling; the ladder below it is deliberately plainer and easier to scan.
+      </p>
+
+      <ol class="walk">
+        <li><b>The podium</b> — top three, given real visual weight.</li>
+        <li><b>The full ladder</b>, with movement indicators so a member can see who is climbing.</li>
+        <li><b>Division filters</b>, since Public and Private are ranked separately and a combined list would be meaningless.</li>
+        <li><b>A sticky "you" bar</b> so a signed-in member never has to hunt for their own row.</li>
+      </ol>
+
+      <div class="note is-gold">
+        <strong>The line about vote integrity is doing real work.</strong> The page states
+        that every vote is logged, capped and audited. In a competition with $4,000 attached
+        and a membership that can vote, "can my mates just brigade this?" is the first
+        question a serious entrant asks — and the honest answer needs to be visible before
+        they enter, not after they lose.
+      </div>
+    </section>
+
+    <!-- ---------------- PROMO ---------------- -->
+    <section class="sect" id="promo">
+      <hr class="hairline">
+      <div class="sect-head">
+        <div class="sect-num">11</div>
+        <div><div class="eyebrow">Part one · the public site</div><h2>The Opening Campaign</h2><span class="route">/promo</span></div>
+      </div>
+      <figure class="shot">
+        <div class="frame">
+          <div class="bar"><span class="dots"><i></i><i></i><i></i></span><span class="addr">appendageantics.co.nz/#/promo</span></div>
+          <img src="img/10-promo.webp" alt="The 75% cashback offer — the first 250 members to upload ten qualifying videos." width="1800" height="1125" loading="lazy" decoding="async">
+        </div>
+        <figcaption><b>The 75% cashback offer</b> — the first 250 members to upload ten qualifying videos.</figcaption>
+      </figure>
+
+      <p class="lede">
+        Your launch offer, given its own page — and treated as the acquisition engine it is
+        rather than a banner.
+      </p>
+
+      <p>
+        The mechanic rewards exactly the behaviour a new platform needs most. It does not
+        pay people to sign up; it pays them to <em>fill the gallery</em>. Ten approved
+        uploads from each of the first 250 members is up to two and a half thousand pieces
+        of content, which is the difference between a platform that looks alive on launch
+        day and one that looks abandoned.
+      </p>
+
+      <div class="note is-gold">
+        <strong>One number the page is careful about.</strong> The cashback is 75% of the
+        <em>Volume One book price</em> — never the membership fee. That distinction is
+        stated everywhere the offer appears, in those words. Ambiguity here is not a copy
+        problem, it is a disputed-charge problem, and it is exactly the sort of thing a
+        member escalates to their bank.
+      </div>
+
+      <ol class="walk">
+        <li><b>The deal, plainly.</b> Four steps and the qualifying conditions, before any of the celebration.</li>
+        <li><b>What counts as qualifying.</b> Approved uploads only, so "I uploaded ten" and "ten of mine passed moderation" cannot be confused.</li>
+        <li><b>The membership giveaway.</b> A separate launch mechanic — a pool of memberships from entry level up to a full year at the top tier, with a published draw date.</li>
+      </ol>
+
+      <p>
+        The same page also exists inside the Members' Lounge as a personal progress view, so
+        a member can see how many of their ten have been approved. It is the same offer seen
+        from the other side of the sign-in.
+      </p>
+    </section>
+
+    <!-- ---------------- ABOUT ---------------- -->
+    <section class="sect" id="about">
+      <hr class="hairline">
+      <div class="sect-head">
+        <div class="sect-num">12</div>
+        <div><div class="eyebrow">Part one · the public site</div><h2>About</h2><span class="route">/about</span></div>
+      </div>
+      <figure class="shot">
+        <div class="frame">
+          <div class="bar"><span class="dots"><i></i><i></i><i></i></span><span class="addr">appendageantics.co.nz/#/about</span></div>
+          <img src="img/11-about.webp" alt="The story — your own words, given room to breathe." width="1800" height="1125" loading="lazy" decoding="async">
+        </div>
+        <figcaption><b>The story</b> — your own words, given room to breathe.</figcaption>
+      </figure>
+
+      <p class="lede">
+        Almost everything on this page is yours. The design's only job was to stop crowding
+        it.
+      </p>
+
+      <p>
+        The About copy, the taglines and the framing of the two award shows came from you
+        essentially intact. What the page adds is structure: the story first, then what
+        makes the platform different, then the two shows presented as two stages under one
+        roof, then the division mechanics, then the community numbers.
+      </p>
+
+      <p>
+        The two-shows section is the one that needed the most thought. The Blokes and Gals
+        shows are genuinely separate ceremonies with separate branding, and they are also
+        both part of one competition with one set of overall honours. The page presents them
+        side by side as equals under a shared umbrella, so neither reads as the main event
+        and the other as an afterthought.
+      </p>
+
+      <div class="note">
+        <strong>The New Zealand flavour is a guess.</strong> The invented members, places
+        and turns of phrase lean local. If you are aiming wider than New Zealand, that is a
+        find-and-replace rather than a rebuild — but it is worth deciding early, because it
+        runs through the tone everywhere.
+      </div>
+    </section>
+
+    <!-- ---------------- FAQ ---------------- -->
+    <section class="sect" id="faq">
+      <hr class="hairline">
+      <div class="sect-head">
+        <div class="sect-num">13</div>
+        <div><div class="eyebrow">Part one · the public site</div><h2>Frequently asked questions</h2><span class="route">/faq</span></div>
+      </div>
+      <figure class="shot">
+        <div class="frame">
+          <div class="bar"><span class="dots"><i></i><i></i><i></i></span><span class="addr">appendageantics.co.nz/#/faq</span></div>
+          <img src="img/12-faq.webp" alt="The questions that stop a sale, answered before support has to." width="1800" height="1125" loading="lazy" decoding="async">
+        </div>
+        <figcaption><b>The questions that stop a sale</b>, answered before support has to.</figcaption>
+      </figure>
+
+      <p class="lede">
+        Grouped by subject, written in the house voice, and aimed squarely at the questions
+        that would otherwise end a visit.
+      </p>
+
+      <p>
+        An FAQ on a platform like this is not a courtesy page — it is where the two
+        genuinely awkward questions get answered. <em>How anonymous is anonymous?</em> and
+        <em>what exactly am I agreeing to film?</em> A visitor who cannot find clear answers
+        to those does not email support; they close the tab.
+      </p>
+
+      <p>
+        So the answers are specific rather than reassuring. What the Private Division does
+        and does not hide, who can see an entry, what happens to footage that is not
+        approved, and what the non-explicit rule means in practice.
+      </p>
+    </section>
+
+    <!-- ---------------- CONTACT ---------------- -->
+    <section class="sect" id="contact">
+      <hr class="hairline">
+      <div class="sect-head">
+        <div class="sect-num">14</div>
+        <div><div class="eyebrow">Part one · the public site</div><h2>Contact</h2><span class="route">/contact</span></div>
+      </div>
+      <figure class="shot">
+        <div class="frame">
+          <div class="bar"><span class="dots"><i></i><i></i><i></i></span><span class="addr">appendageantics.co.nz/#/contact</span></div>
+          <img src="img/13-contact.webp" alt="Every route in, with its response time stated up front." width="1800" height="1125" loading="lazy" decoding="async">
+        </div>
+        <figcaption><b>Every route in, with its response time</b> stated up front.</figcaption>
+      </figure>
+
+      <p class="lede">
+        A contact form, a set of categories, and — unusually — a published response target
+        against each one.
+      </p>
+
+      <p>
+        Most contact pages promise to get back to you soon. This one states how soon, per
+        category, and says the clock starts when the ticket is created. That is a commitment
+        rather than a pleasantry, and it is worth understanding as one: it is visible on the
+        staff side too, where the support desk is measured against the same targets.
+      </p>
+
+      <div class="note">
+        <strong>Something to decide before launch.</strong> Published response targets are
+        excellent for conversion and unforgiving in practice. They are only worth keeping if
+        there is someone to meet them — which is one of the staffing realities the Control
+        Room section makes concrete.
+      </div>
+    </section>
+
+    <!-- ---------------- LEGAL ---------------- -->
+    <section class="sect" id="legal">
+      <hr class="hairline">
+      <div class="sect-head">
+        <div class="sect-num">15</div>
+        <div><div class="eyebrow">Part one · the public site</div><h2>Legal &amp; Compliance</h2><span class="route">/legal</span></div>
+      </div>
+      <figure class="shot">
+        <div class="frame">
+          <div class="bar"><span class="dots"><i></i><i></i><i></i></span><span class="addr">appendageantics.co.nz/#/legal</span></div>
+          <img src="img/14-legal-hub.webp" alt="Twenty-one documents, grouped by what they govern." width="1800" height="1125" loading="lazy" decoding="async">
+        </div>
+        <figcaption><b>Twenty-one documents</b>, grouped by what they govern.</figcaption>
+      </figure>
+
+      <p class="lede">
+        Terms, privacy, content rules, competition terms, complaints, data handling,
+        takedowns — twenty-one documents, organised by what they actually govern rather than
+        dumped in a footer list.
+      </p>
+
+      <p>
+        This is the least glamorous part of the build and arguably the most important one
+        commercially. An R18 UGC platform is asking a payment provider, a hosting provider
+        and eventually a regulator to take it seriously. All three look for exactly this,
+        and its absence is the sort of thing that stops an application rather than delaying
+        it.
+      </p>
+
+      <figure class="shot">
+        <div class="frame">
+          <div class="bar"><span class="dots"><i></i><i></i><i></i></span><span class="addr">appendageantics.co.nz/#/legal/competition-terms</span></div>
+          <img src="img/14-legal-doc.webp" alt="A single legal document — the Competition Terms — showing its structure and its prototype disclaimer." width="1800" height="1125" loading="lazy" decoding="async">
+        </div>
+        <figcaption><b>One document opened.</b> The Competition Terms — carrying the competition period, the closing date, the prize schedule and the disclaimer at the top.</figcaption>
+      </figure>
+
+      <div class="note is-gold">
+        <strong>Read the disclaimer at the top of every document, and keep it.</strong> Each
+        one states plainly that it is placeholder wording pending legal review, not
+        enforceable text. It would be very easy — and genuinely dangerous — for a prototype
+        to ship convincing-looking legal documents that nobody qualified has ever read.
+        These say what they are. That honesty is a feature, and both independent reviewers
+        of this build singled it out.
+      </div>
+
+      <p>
+        What the documents give you is the <em>structure</em>: every policy a platform like
+        this needs, each with a scope and a shape, ready to hand to a lawyer as a brief
+        rather than a blank page.
+      </p>
+    </section>
+
+    <!-- ---------------- JOIN / LOGIN ---------------- -->
+    <section class="sect" id="join">
+      <hr class="hairline">
+      <div class="sect-head">
+        <div class="sect-num">16</div>
+        <div><div class="eyebrow">Part one · the public site</div><h2>Joining &amp; signing in</h2><span class="route">/register · /login</span></div>
+      </div>
+      <figure class="shot">
+        <div class="frame">
+          <div class="bar"><span class="dots"><i></i><i></i><i></i></span><span class="addr">appendageantics.co.nz/#/register</span></div>
+          <img src="img/15-register.webp" alt="Two accounts per purchase — the rule is explained where it applies, not buried in terms." width="1800" height="1125" loading="lazy" decoding="async">
+        </div>
+        <figcaption><b>Two accounts per purchase</b> — the rule is explained where it applies, not buried in terms.</figcaption>
+      </figure>
+
+      <p class="lede">
+        Registration has to carry one genuinely unusual rule, and it carries it in the open.
+      </p>
+
+      <p>
+        Your two-accounts-per-purchase mechanic is a good idea — it is how a solo buyer
+        brings a partner or a mate in, and it doubles the population without doubling the
+        marketing. But it is unusual enough that a new member will not assume it. So it is
+        explained at the point of signing up, not left in the terms for someone to discover
+        six weeks later when they wonder why they are paying twice.
+      </p>
+
+      <p>
+        Signing in is the plainer twin: email, password, and a route back to wherever the
+        member was heading before they were asked to sign in. If someone clicks a members-only
+        link, signs in, and lands on a generic dashboard instead of the thing they clicked,
+        that is a small daily irritation — so the intended destination is remembered.
+      </p>
+
+      <figure class="shot">
+        <div class="frame">
+          <div class="bar"><span class="dots"><i></i><i></i><i></i></span><span class="addr">appendageantics.co.nz/#/login</span></div>
+          <img src="img/15-login.webp" alt="The sign-in screen." width="1800" height="1125" loading="lazy" decoding="async">
+        </div>
+        <figcaption><b>Signing in.</b> Deliberately plain — and it remembers where the member was trying to go.</figcaption>
+      </figure>
+
+      <div class="note">
+        <strong>No real accounts exist.</strong> Signing in creates a demonstration session
+        so the Members' Lounge can be explored; nothing is stored anywhere and no password
+        is ever checked. Identity and age verification on a live R18 platform would go
+        through a third-party provider.
+      </div>
+    </section>
+
+    <!-- ---------------- CART ---------------- -->
+    <section class="sect" id="cart">
+      <hr class="hairline">
+      <div class="sect-head">
+        <div class="sect-num">17</div>
+        <div><div class="eyebrow">Part one · the public site</div><h2>The cart</h2><span class="route">drawer, any page</span></div>
+      </div>
+      <figure class="shot">
+        <div class="frame">
+          <div class="bar"><span class="dots"><i></i><i></i><i></i></span><span class="addr">appendageantics.co.nz/#/memberships</span></div>
+          <img src="img/16-cart.webp" alt="A slide-over, not a page. Adding something never costs the visitor their place." width="1800" height="1125" loading="lazy" decoding="async">
+        </div>
+        <figcaption><b>A slide-over, not a page.</b> Adding something never costs the visitor their place.</figcaption>
+      </figure>
+
+      <p class="lede">
+        Books and memberships share one cart, which slides over the page rather than
+        replacing it.
+      </p>
+
+      <p>
+        The reasoning is straightforward: someone browsing the series who adds Volume One
+        is very likely to add Volume Two, and sending them to a separate cart page after
+        each addition breaks that run. The drawer lets them add, confirm, and carry on
+        where they were.
+      </p>
+
+      <p>
+        It also handles the one case that would otherwise cause disputes — a cart containing
+        both a one-off book purchase and a recurring membership. Those are billed in
+        completely different ways, and the drawer separates them and states the terms of
+        each rather than showing a single total that quietly means two different things.
+      </p>
+    </section>
+
+    <!-- ---------------- 404 ---------------- -->
+    <section class="sect" id="notfound">
+      <hr class="hairline">
+      <div class="sect-head">
+        <div class="sect-num">18</div>
+        <div><div class="eyebrow">Part one · the public site</div><h2>Wrong turns</h2><span class="route">404</span></div>
+      </div>
+      <figure class="shot">
+        <div class="frame">
+          <div class="bar"><span class="dots"><i></i><i></i><i></i></span><span class="addr">appendageantics.co.nz/#/no-such-page</span></div>
+          <img src="img/17-404.webp" alt="Even the dead end is on-brand, and offers a way back rather than a shrug." width="1800" height="1125" loading="lazy" decoding="async">
+        </div>
+        <figcaption><b>Even the dead end is on-brand</b>, and offers a way back rather than a shrug.</figcaption>
+      </figure>
+
+      <p class="lede">
+        A designed 404, in the house voice, with real routes back into the site.
+      </p>
+
+      <p>
+        Worth thirty seconds of your attention for one reason: it is the page a visitor
+        sees when something has gone wrong, which makes it the page most likely to end a
+        visit. An error that is funny and offers three obvious ways onward recovers people
+        that a blank "not found" loses.
+      </p>
+    </section>
+
+    <!-- =============================================================
+         PART TWO
+         ============================================================= -->
+    <section class="part" id="part-lounge">
+      <div class="part-inner">
+        <div class="eyebrow-gold">Part two</div>
+        <h2>The Members' Lounge</h2>
+        <p>
+          What a paying member gets for their money. Fifteen screens behind the sign-in,
+          reached through a sidebar that sits inside the site rather than replacing it —
+          a member is never yanked out of the world they just paid to enter.
+        </p>
+      </div>
+    </section>
+
+    <!-- ---------------- DASHBOARD ---------------- -->
+    <section class="sect" id="dashboard">
+      <hr class="hairline">
+      <div class="sect-head">
+        <div class="sect-num">19</div>
+        <div>
+          <div class="eyebrow">Part two · the Members' Lounge</div>
+          <h2>The Dashboard</h2>
+          <span class="route">/dashboard</span>
+        </div>
+      </div>
+
+      <p class="lede">
+        The member's home base — where they stand, what needs their attention, and what
+        to do next.
+      </p>
+
+      <figure class="shot">
+        <div class="frame">
+          <div class="bar"><span class="dots"><i></i><i></i><i></i></span><span class="addr">appendageantics.co.nz/#/dashboard</span></div>
+          <img src="img/18-dashboard.webp" alt="The lounge, opened. Sidebar on the left, the member's standing across the top — and the site's own navigation still there above it." width="1800" height="1125" loading="lazy" decoding="async">
+        </div>
+        <figcaption><b>The lounge, opened.</b> Sidebar on the left, the member's standing across the top — and the site's own navigation still there above it.</figcaption>
+      </figure>
+
+      <p>
+        Notice what has <em>not</em> happened: the top navigation is still there. An earlier
+        version of this replaced the whole site chrome when you entered the lounge, and it
+        was disorienting — you paid to get in and the site apparently vanished. Now the
+        lounge nests inside the site, and every sidebar link keeps you in the lounge.
+      </p>
+
+      <p>
+        The top of the page answers the three questions a member actually opens the site
+        with: where am I ranked, how am I tracking against the campaign, and is there
+        anything waiting for me.
+      </p>
+
+      <div class="note">
+        <strong>A deliberate choice about emptiness.</strong> A brand-new member sees a
+        dashboard with real structure and honest zeroes, not a wall of fake activity.
+        Every empty state says what will fill it and how to make that happen.
+      </div>
+
+      <p>
+        The sidebar beside it is the map of everything a membership includes. Fifteen
+        destinations is a lot, so they are grouped by what a member came to do — compete,
+        watch and vote, read, or manage their account — rather than listed alphabetically.
+      </p>
+
+      <p>
+        It is worth scrolling that sidebar slowly, because it is the clearest single answer
+        to "what am I actually paying for". A tier list on a sales page is a promise; this
+        is the promise itemised.
+      </p>
+    </section>
+
+    <!-- ---------------- LOUNGE STUBS ---------------- -->
+    <section class="sect" id="upload">
+      <hr class="hairline">
+      <div class="sect-head"><div class="sect-num">20</div>
+      <div><div class="eyebrow">Part two · the Members' Lounge</div><h2>Upload an entry</h2><span class="route">/upload</span></div></div>
+      <figure class="shot"><div class="frame">
+        <div class="bar"><span class="dots"><i></i><i></i><i></i></span><span class="addr">appendageantics.co.nz/#/upload</span></div>
+        <img src="img/19-upload.webp" alt="The submission flow, including the choice between the two entry routes." width="1800" height="1125" loading="lazy" decoding="async">
+      </div><figcaption><b>The submission flow</b>, including the choice between the two entry routes.</figcaption></figure>
+
+      <p class="lede">
+        The single most important screen in the lounge, because a platform whose upload
+        flow confuses people has no content.
+      </p>
+
+      <p>
+        There are two ways to enter, and the page makes a member choose deliberately
+        between them rather than defaulting into one. They can submit a finished, edited
+        video ready to go live — or they can send raw footage to your editing desk and have
+        it cut for them. Those go to entirely different places, are handled by different
+        people, and one of them costs money.
+      </p>
+
+      <ol class="walk">
+        <li><b>Which challenge.</b> Picked from the volume, so the entry is tied to a real brief rather than free-form.</li>
+        <li><b>Which route</b> — finished cut, or raw footage to the editing desk.</li>
+        <li><b>Division.</b> Public or Private, decided per entry.</li>
+        <li><b>The rules, restated at the point of upload</b> — own footage, verified adult, nothing explicit. This is the last moment before a member commits, and the cheapest place to prevent a rejection.</li>
+        <li><b>What happens next.</b> Moderation, then approval, then live — with the expected timeline stated so nobody is left refreshing.</li>
+      </ol>
+
+      <div class="note is-gold">
+        <strong>Eligibility bites here.</strong> A first upload requires proof of purchase.
+        That is not decoration — it is what makes "buy the book to enter" a real rule rather
+        than an honour system, and it is why the Proof of Purchase screen exists further
+        down this list.
+      </div>
+    </section>
+
+    <section class="sect" id="l-campaign">
+      <hr class="hairline">
+      <div class="sect-head"><div class="sect-num">21</div>
+      <div><div class="eyebrow">Part two · the Members' Lounge</div><h2>Campaign progress</h2><span class="route">/dashboard/campaign</span></div></div>
+      <figure class="shot"><div class="frame">
+        <div class="bar"><span class="dots"><i></i><i></i><i></i></span><span class="addr">appendageantics.co.nz/#/dashboard/campaign</span></div>
+        <img src="img/20-campaign.webp" alt="Ten videos to cashback, tracked honestly." width="1800" height="1125" loading="lazy" decoding="async">
+      </div><figcaption><b>Ten videos to cashback</b>, tracked honestly.</figcaption></figure>
+
+      <p class="lede">
+        The launch offer seen from the inside: how many of your ten have been approved, and
+        what is left to do.
+      </p>
+
+      <p>
+        The important word is <em>approved</em>. A member who has uploaded ten videos and had
+        seven approved is at seven, and the page says seven — because the alternative is
+        someone believing they have qualified, not receiving their cashback, and being
+        entirely right to be angry about it.
+      </p>
+
+      <p>
+        It also shows the campaign's own limit — the offer is capped at the first 250
+        qualifying members — so a member can see whether places remain before investing the
+        effort. Discovering that after the tenth upload would be the worst possible moment.
+      </p>
+
+      <div class="note">
+        <strong>Note the sidebar is still here.</strong> This page also exists on the public
+        site, but reaching it from inside the lounge keeps a member in the lounge. A sidebar
+        link that quietly ejects someone back to the public site is disorienting, so no
+        sidebar link does it.
+      </div>
+    </section>
+
+    <section class="sect" id="l-rankings">
+      <hr class="hairline">
+      <div class="sect-head"><div class="sect-num">22</div>
+      <div><div class="eyebrow">Part two · the Members' Lounge</div><h2>My Rankings</h2><span class="route">/dashboard/rankings</span></div></div>
+      <figure class="shot"><div class="frame">
+        <div class="bar"><span class="dots"><i></i><i></i><i></i></span><span class="addr">appendageantics.co.nz/#/dashboard/rankings</span></div>
+        <img src="img/21-rankings.webp" alt="Personal standing — not the public ladder re-skinned." width="1800" height="1125" loading="lazy" decoding="async">
+      </div><figcaption><b>Personal standing</b> — not the public ladder re-skinned.</figcaption></figure>
+
+      <p class="lede">
+        Where this member sits, how they got there, and what would move them up.
+      </p>
+
+      <p>
+        This deliberately is not the public leaderboard with a highlight on one row. That
+        page answers "who is winning"; this one answers "how am I doing", which is a
+        different question with different useful answers — their trajectory over time,
+        their standing within their own division and category, and the gap to the place
+        above.
+      </p>
+
+      <p>
+        That last number is the one members actually act on. "You are 40 votes off fourth"
+        produces another upload. A rank on its own produces a shrug.
+      </p>
+    </section>
+
+    <section class="sect" id="l-entries">
+      <hr class="hairline">
+      <div class="sect-head"><div class="sect-num">23</div>
+      <div><div class="eyebrow">Part two · the Members' Lounge</div><h2>My Entries</h2><span class="route">/dashboard/entries</span></div></div>
+      <figure class="shot"><div class="frame">
+        <div class="bar"><span class="dots"><i></i><i></i><i></i></span><span class="addr">appendageantics.co.nz/#/dashboard/entries</span></div>
+        <img src="img/22-entries.webp" alt="Every submission and where it stands in the review process." width="1800" height="1125" loading="lazy" decoding="async">
+      </div><figcaption><b>Every submission and where it stands</b> in the review process.</figcaption></figure>
+
+      <p class="lede">
+        Every entry this member has submitted, with its current status and its performance.
+      </p>
+
+      <p>
+        Status is the point. An entry can be queued, in moderation, approved and live, or
+        rejected — and a member needs to know which without asking. Uploads that vanish into
+        an unexplained silence are the most reliable generator of support tickets on any
+        platform of this kind.
+      </p>
+
+      <p>
+        The page also shows category limits: how many entries this member has submitted per
+        challenge category and how many they are still allowed. Those limits exist to stop
+        one person flooding a category, and stating them here means nobody hits the ceiling
+        by surprise after filming.
+      </p>
+    </section>
+
+    <section class="sect" id="l-votes">
+      <hr class="hairline">
+      <div class="sect-head"><div class="sect-num">24</div>
+      <div><div class="eyebrow">Part two · the Members' Lounge</div><h2>My Votes</h2><span class="route">/dashboard/votes</span></div></div>
+      <figure class="shot"><div class="frame">
+        <div class="bar"><span class="dots"><i></i><i></i><i></i></span><span class="addr">appendageantics.co.nz/#/dashboard/votes</span></div>
+        <img src="img/23-votes.webp" alt="What they have backed, and how those entries went on to do." width="1800" height="1125" loading="lazy" decoding="async">
+      </div><figcaption><b>What they have backed</b>, and how those entries went on to do.</figcaption></figure>
+
+      <p class="lede">
+        Voting is a tier perk, it is rationed daily, and this is where a member sees both
+        facts.
+      </p>
+
+      <p>
+        The daily allowance sits at the top: how many votes this member has left today, and
+        when it resets. Capping votes is what stops the competition being decided by whoever
+        is most bored, and a visible allowance turns that constraint into part of the game
+        — a member with three votes left spends them thoughtfully.
+      </p>
+
+      <p>
+        Below it, the entries they have backed and how those have gone on to place. It is a
+        small pleasure and a real retention hook: people enjoy having spotted a winner early,
+        and this is the page that lets them prove it.
+      </p>
+    </section>
+
+    <section class="sect" id="l-comments">
+      <hr class="hairline">
+      <div class="sect-head"><div class="sect-num">25</div>
+      <div><div class="eyebrow">Part two · the Members' Lounge</div><h2>My Comments</h2><span class="route">/dashboard/comments</span></div></div>
+      <figure class="shot"><div class="frame">
+        <div class="bar"><span class="dots"><i></i><i></i><i></i></span><span class="addr">appendageantics.co.nz/#/dashboard/comments</span></div>
+        <img src="img/24-comments.webp" alt="Their own voice on the platform, in one place." width="1800" height="1125" loading="lazy" decoding="async">
+      </div><figcaption><b>Their own voice on the platform</b>, in one place.</figcaption></figure>
+
+      <p class="lede">
+        Everything this member has said publicly, and everything said back to them.
+      </p>
+
+      <p>
+        Two reasons this page exists. The practical one is that people want to find their
+        own comment again, and hunting through a gallery for it is miserable. The
+        commercial one is that replies bring people back — a member with an unread reply
+        has a reason to return today rather than at the weekend.
+      </p>
+
+      <p>
+        It is also the natural place to manage one's own footprint: delete a comment,
+        follow a thread, and see what has been moderated and why.
+      </p>
+    </section>
+
+    <section class="sect" id="l-library">
+      <hr class="hairline">
+      <div class="sect-head"><div class="sect-num">26</div>
+      <div><div class="eyebrow">Part two · the Members' Lounge</div><h2>My Library</h2><span class="route">/dashboard/library</span></div></div>
+      <figure class="shot"><div class="frame">
+        <div class="bar"><span class="dots"><i></i><i></i><i></i></span><span class="addr">appendageantics.co.nz/#/dashboard/library</span></div>
+        <img src="img/25-library.webp" alt="The e-books they own, and how they read them." width="1800" height="1125" loading="lazy" decoding="async">
+      </div><figcaption><b>The e-books they own</b>, and how they read them.</figcaption></figure>
+
+      <p class="lede">
+        The books a member has bought, and the way they actually get them.
+      </p>
+
+      <p>
+        Selling an e-book is only half the job; delivering it reliably for years is the
+        other half, and it is where small operations most often come unstuck. This page is
+        the answer to every "I bought this and can't find it" email — the library is always
+        there, always current, and re-sending access is one click rather than a support
+        conversation.
+      </p>
+
+      <div class="note">
+        <strong>Honest about the mechanics.</strong> The download buttons explain that a
+        real build would hand the request to a storage provider to sign a short-lived link
+        rather than serving a file directly. That is how you sell an e-book without it
+        immediately appearing elsewhere for free, and it is worth seeing named rather than
+        assumed.
+      </div>
+    </section>
+
+    <section class="sect" id="l-editing">
+      <hr class="hairline">
+      <div class="sect-head"><div class="sect-num">27</div>
+      <div><div class="eyebrow">Part two · the Members' Lounge</div><h2>Editing Orders</h2><span class="route">/dashboard/editing</span></div></div>
+      <figure class="shot"><div class="frame">
+        <div class="bar"><span class="dots"><i></i><i></i><i></i></span><span class="addr">appendageantics.co.nz/#/dashboard/editing</span></div>
+        <img src="img/26-editing.webp" alt="The paid editing service, tracked from order to delivery." width="1800" height="1125" loading="lazy" decoding="async">
+      </div><figcaption><b>The paid editing service</b>, tracked from order to delivery.</figcaption></figure>
+
+      <p class="lede">
+        For members who send raw footage rather than a finished cut — the order, the proof,
+        and the sign-off.
+      </p>
+
+      <p>
+        This is a real revenue line and, quietly, one of the more interesting parts of the
+        proposition. Plenty of people will happily film something and have no idea how to
+        edit it; charging to do that for them removes the single biggest barrier to entry
+        and earns money doing it.
+      </p>
+
+      <p>
+        The flow is built around one thing: a member must approve the cut before it goes
+        anywhere. They see the proof, and they either approve it or request a revision with
+        notes. Publishing someone's footage in a form they had not signed off would be a
+        serious breach of trust on a platform where the footage is personal.
+      </p>
+    </section>
+
+    <section class="sect" id="l-membership">
+      <hr class="hairline">
+      <div class="sect-head"><div class="sect-num">28</div>
+      <div><div class="eyebrow">Part two · the Members' Lounge</div><h2>My Membership</h2><span class="route">/dashboard/membership</span></div></div>
+      <figure class="shot"><div class="frame">
+        <div class="bar"><span class="dots"><i></i><i></i><i></i></span><span class="addr">appendageantics.co.nz/#/dashboard/membership</span></div>
+        <img src="img/27-membership.webp" alt="Their tier, their perks, and what upgrading would give them." width="1800" height="1125" loading="lazy" decoding="async">
+      </div><figcaption><b>Their tier, their perks, and what upgrading would give them.</b></figcaption></figure>
+
+      <p class="lede">
+        What this member is paying for, what it gets them, and what the next tier up would
+        add.
+      </p>
+
+      <p>
+        The page lists the perks currently in force rather than the tier's marketing
+        summary — including any that are inactive and why. A member who believes they are
+        owed something they are not is a dispute waiting to happen, and the fix is showing
+        the real state rather than the brochure.
+      </p>
+
+      <p>
+        Upgrading is presented as a comparison against what they already have, not as a
+        fresh pitch. Someone already paying does not need the platform sold to them again;
+        they need to know what changes and what it costs.
+      </p>
+
+      <div class="note">
+        <strong>Cancelling is here too, and it is not hidden.</strong> Burying cancellation
+        wins a month of revenue and costs a chargeback plus a review. It asks for
+        confirmation, states when access actually ends, and lets them go.
+      </div>
+    </section>
+
+    <section class="sect" id="l-payments">
+      <hr class="hairline">
+      <div class="sect-head"><div class="sect-num">29</div>
+      <div><div class="eyebrow">Part two · the Members' Lounge</div><h2>Payment History</h2><span class="route">/dashboard/payments</span></div></div>
+      <figure class="shot"><div class="frame">
+        <div class="bar"><span class="dots"><i></i><i></i><i></i></span><span class="addr">appendageantics.co.nz/#/dashboard/payments</span></div>
+        <img src="img/28-payments.webp" alt="Every charge, itemised — the page that prevents support tickets." width="1800" height="1125" loading="lazy" decoding="async">
+      </div><figcaption><b>Every charge, itemised</b> — the page that prevents support tickets.</figcaption></figure>
+
+      <p class="lede">
+        Every payment this member has made, what it was for, and what it totals.
+      </p>
+
+      <p>
+        Unglamorous and worth more than it looks. Most billing disputes are not fraud —
+        they are somebody failing to recognise a line on a bank statement. A page that says
+        plainly what each charge was, on what date, for which tier or book, resolves that
+        before it reaches you or their bank.
+      </p>
+
+      <div class="note">
+        <strong>Straight about receipts.</strong> The download control explains that no
+        receipt file exists in the prototype and that a real build would generate a PDF
+        from the payment record. Offering a button that silently does nothing is exactly
+        the kind of small dishonesty that makes a demo feel unreliable.
+      </div>
+    </section>
+
+    <section class="sect" id="l-proof">
+      <hr class="hairline">
+      <div class="sect-head"><div class="sect-num">30</div>
+      <div><div class="eyebrow">Part two · the Members' Lounge</div><h2>Proof of Purchase</h2><span class="route">/dashboard/proof</span></div></div>
+      <figure class="shot"><div class="frame">
+        <div class="bar"><span class="dots"><i></i><i></i><i></i></span><span class="addr">appendageantics.co.nz/#/dashboard/proof</span></div>
+        <img src="img/29-proof.webp" alt="The receipt that unlocks entry — required before a first upload counts." width="1800" height="1125" loading="lazy" decoding="async">
+      </div><figcaption><b>The receipt that unlocks entry</b> — required before a first upload counts.</figcaption></figure>
+
+      <p class="lede">
+        The screen that turns "buy the book to enter" from a slogan into a rule.
+      </p>
+
+      <p>
+        A member's purchase of Volume One is what makes them eligible to compete, so that
+        purchase has to be verifiable. This page shows their eligibility status, the
+        purchase behind it, and — where the purchase was made somewhere the platform cannot
+        see directly — how to submit evidence of it.
+      </p>
+
+      <p>
+        It is also where the two-accounts-per-purchase rule is actually administered. One
+        purchase entitles a buyer to link a second account, and this is where that link is
+        made and where both accounts can see it has been made. Without a screen like this,
+        the rule is a promise on a marketing page that nothing enforces.
+      </p>
+
+      <div class="note">
+        <strong>Worth thinking about before launch.</strong> If books sell through a
+        storefront the platform cannot query, verification is partly manual — someone
+        matching receipts to accounts. That is a small job at 50 members and a real one at
+        5,000, and it is the kind of cost that only becomes visible once it is a problem.
+      </div>
+    </section>
+
+    <section class="sect" id="l-notifications">
+      <hr class="hairline">
+      <div class="sect-head"><div class="sect-num">31</div>
+      <div><div class="eyebrow">Part two · the Members' Lounge</div><h2>Notifications</h2><span class="route">/dashboard/notifications</span></div></div>
+      <figure class="shot"><div class="frame">
+        <div class="bar"><span class="dots"><i></i><i></i><i></i></span><span class="addr">appendageantics.co.nz/#/dashboard/notifications</span></div>
+        <img src="img/30-notifications.webp" alt="Approvals, votes, rank changes and staff messages, in one stream." width="1800" height="1125" loading="lazy" decoding="async">
+      </div><figcaption><b>Approvals, votes, rank changes and staff messages</b>, in one stream.</figcaption></figure>
+
+      <p class="lede">
+        One stream for everything that has happened to this member since they last looked.
+      </p>
+
+      <p>
+        Entry approved, entry rejected, someone voted, someone replied, rank moved, staff
+        got in touch. These are the events that bring people back, and collecting them in
+        one place means a member has a single thing to check rather than four pages to
+        sweep.
+      </p>
+
+      <p>
+        Rejections are included and explained rather than delivered silently. A member whose
+        entry was declined without a reason assumes bias; one who is told which rule it fell
+        foul of usually just refilms it.
+      </p>
+    </section>
+
+    <section class="sect" id="l-profile">
+      <hr class="hairline">
+      <div class="sect-head"><div class="sect-num">32</div>
+      <div><div class="eyebrow">Part two · the Members' Lounge</div><h2>My Profile</h2><span class="route">/dashboard/profile</span></div></div>
+      <figure class="shot"><div class="frame">
+        <div class="bar"><span class="dots"><i></i><i></i><i></i></span><span class="addr">appendageantics.co.nz/#/dashboard/profile</span></div>
+        <img src="img/31-profile.webp" alt="The public face — screen name, division, and what others can see." width="1800" height="1125" loading="lazy" decoding="async">
+      </div><figcaption><b>The public face</b> — screen name, division, and what others can see.</figcaption></figure>
+
+      <p class="lede">
+        The identity a member presents to everyone else, and precise control over how much
+        of it there is.
+      </p>
+
+      <p>
+        Screen name, division, tier, and their record — the things that appear beside their
+        name on an entry or a leaderboard row. On most platforms this page is an
+        afterthought. Here it is load-bearing, because a good number of your members will
+        be weighing up exactly how visible they are willing to be.
+      </p>
+
+      <p>
+        So the page is explicit about what is public rather than leaving it to be inferred.
+        Someone in the Private Division needs to be certain, on a screen they can look at,
+        that what they think is sealed is sealed.
+      </p>
+    </section>
+
+    <section class="sect" id="l-settings">
+      <hr class="hairline">
+      <div class="sect-head"><div class="sect-num">33</div>
+      <div><div class="eyebrow">Part two · the Members' Lounge</div><h2>Settings</h2><span class="route">/dashboard/settings</span></div></div>
+      <figure class="shot"><div class="frame">
+        <div class="bar"><span class="dots"><i></i><i></i><i></i></span><span class="addr">appendageantics.co.nz/#/dashboard/settings</span></div>
+        <img src="img/32-settings.webp" alt="Privacy, email preferences and account control, including leaving." width="1800" height="1125" loading="lazy" decoding="async">
+      </div><figcaption><b>Privacy, email preferences and account control</b>, including leaving.</figcaption></figure>
+
+      <p class="lede">
+        Account, privacy, notifications, and the serious options — grouped so the serious
+        ones are unmistakable.
+      </p>
+
+      <p>
+        Everyday settings sit at the top: email address, password, which notifications to
+        receive, what appears publicly. Below them, deliberately separated, the decisions
+        that are hard to undo — deactivating, deleting, and requesting a copy of one's data.
+      </p>
+
+      <p>
+        That separation is intentional. Changing an email preference and deleting an account
+        should not look like the same class of action, and on an R18 platform a member
+        deleting everything is a request that has to work properly and visibly.
+      </p>
+    </section>
+
+    <!-- =============================================================
+         PART THREE
+         ============================================================= -->
+    <section class="part" id="part-admin">
+      <div class="part-inner">
+        <div class="eyebrow-gold">Part three</div>
+        <h2>The Control Room</h2>
+        <p>
+          The staff side — twelve screens covering moderation, judging, prizes, support,
+          money and the promotional machinery. This is deliberately a separate world with
+          its own plainer chrome, because the people using it are working, not browsing.
+        </p>
+      </div>
+    </section>
+
+    <section class="sect" id="admin">
+      <hr class="hairline">
+      <div class="sect-head"><div class="sect-num">34</div>
+      <div><div class="eyebrow">Part three · the Control Room</div><h2>Staff overview</h2><span class="route">/admin</span></div></div>
+
+      <p class="lede">
+        The morning screen: what came in overnight, what is waiting on a decision, and
+        where the numbers sit.
+      </p>
+
+      <figure class="shot"><div class="frame">
+        <div class="bar"><span class="dots"><i></i><i></i><i></i></span><span class="addr">appendageantics.co.nz/#/admin</span></div>
+        <img src="img/33-admin-home.webp" alt="The operational dashboard. Quieter than the public site by design — this is a tool, not a shopfront." width="1800" height="1125" loading="lazy" decoding="async">
+      </div><figcaption><b>The operational dashboard.</b> Quieter than the public site by design — this is a tool, not a shopfront.</figcaption></figure>
+
+      <p>
+        The whole staff side runs on a deliberately restrained version of the brand: the
+        same typefaces and the same dark ground, but far less gold and far more table. A
+        moderator working a queue for two hours does not need a shimmering hero; they need
+        to read forty rows without eye strain and hit the right button every time.
+      </p>
+
+      <div class="note">
+        <strong>This is where the real operating cost lives.</strong> Twelve staff screens
+        is not decoration — it is an honest picture of what running a UGC video platform
+        actually takes: someone reviewing every upload, someone answering support, someone
+        signing off prizes. Worth seeing before committing to the full build.
+      </div>
+
+      <p>
+        The overview itself is a triage screen: what is in each queue, what is overdue, and
+        the day's headline numbers. Someone opening it should know within seconds where to
+        go first.
+      </p>
+
+      <div class="note">
+        <strong>One honest note carried across every staff screen.</strong> Decisions taken
+        here — approvals, rejections, sign-offs — are demonstrations. Nothing is saved, and
+        the screens say so rather than appearing to record something they do not. It is the
+        difference between showing how the tool would work and pretending it already does.
+      </div>
+    </section>
+
+    <section class="sect" id="a-users">
+      <hr class="hairline">
+      <div class="sect-head"><div class="sect-num">35</div>
+      <div><div class="eyebrow">Part three · the Control Room</div><h2>Members</h2><span class="route">/admin/users</span></div></div>
+      <figure class="shot"><div class="frame">
+        <div class="bar"><span class="dots"><i></i><i></i><i></i></span><span class="addr">appendageantics.co.nz/#/admin/users</span></div>
+        <img src="img/34-admin-users.webp" alt="The member register — tier, division, standing and history." width="1800" height="1125" loading="lazy" decoding="async">
+      </div><figcaption><b>The member register</b> — tier, division, standing and history.</figcaption></figure>
+
+      <p class="lede">
+        Everyone on the platform, searchable, with the full picture of any one of them a
+        click away.
+      </p>
+
+      <p>
+        The list gives the operational essentials — screen name, tier, division, status,
+        activity. Opening a member gives the rest: their entries, their payments, their
+        reports, their history with the platform.
+      </p>
+
+      <p>
+        That detail view is what makes a support conversation possible. Answering "why was
+        my entry rejected and why can't I vote" requires seeing everything about one person
+        at once, and hunting across five screens to assemble it is how support queues grow.
+      </p>
+    </section>
+
+    <section class="sect" id="a-moderation">
+      <hr class="hairline">
+      <div class="sect-head"><div class="sect-num">36</div>
+      <div><div class="eyebrow">Part three · the Control Room</div><h2>Moderation queue</h2><span class="route">/admin/moderation</span></div></div>
+      <figure class="shot"><div class="frame">
+        <div class="bar"><span class="dots"><i></i><i></i><i></i></span><span class="addr">appendageantics.co.nz/#/admin/moderation</span></div>
+        <img src="img/35-admin-moderation.webp" alt="Every upload, reviewed before it goes live. The busiest desk in the building." width="1800" height="1125" loading="lazy" decoding="async">
+      </div><figcaption><b>Every upload, reviewed before it goes live.</b> The busiest desk in the building.</figcaption></figure>
+
+      <p class="lede">
+        Nothing reaches the gallery without passing through here, and this is the screen
+        that determines whether the platform is viable.
+      </p>
+
+      <p>
+        Every upload is reviewed before publication. Not sampled, not reviewed after
+        complaint — every one. On an R18 user-generated platform that is not a
+        quality-control preference, it is the condition on which payment processors and
+        hosts will work with you at all.
+      </p>
+
+      <ol class="walk">
+        <li><b>The queue</b>, ordered by wait time, so nothing sits forgotten.</li>
+        <li><b>The entry in context</b> — which challenge, which member, which division, and their history.</li>
+        <li><b>Approve or reject with a reason</b>, since the reason is what the member is told and what an appeal is judged against.</li>
+        <li><b>An audit trail</b> — who decided what, and when.</li>
+      </ol>
+
+      <div class="note is-gold">
+        <strong>This is the number to think hardest about.</strong> Moderation is the cost
+        that scales directly with success: more members means more uploads means more
+        reviewing, and it cannot be skipped or deferred. If the launch campaign works
+        exactly as intended, this queue receives up to two and a half thousand videos.
+        Someone has to watch all of them.
+      </div>
+    </section>
+
+    <section class="sect" id="a-originals">
+      <hr class="hairline">
+      <div class="sect-head"><div class="sect-num">37</div>
+      <div><div class="eyebrow">Part three · the Control Room</div><h2>Originals Vault</h2><span class="route">/admin/originals</span></div></div>
+      <figure class="shot"><div class="frame">
+        <div class="bar"><span class="dots"><i></i><i></i><i></i></span><span class="addr">appendageantics.co.nz/#/admin/originals</span></div>
+        <img src="img/36-admin-originals.webp" alt="Unedited source footage, held under stricter access than anything else on the platform." width="1800" height="1125" loading="lazy" decoding="async">
+      </div><figcaption><b>Unedited source footage</b>, held under stricter access than anything else on the platform.</figcaption></figure>
+
+      <p class="lede">
+        Where raw, unedited footage lives — and the most tightly controlled screen in the
+        build.
+      </p>
+
+      <p>
+        Members who use the editing service send in original footage. That material is more
+        sensitive than anything that ever reaches the gallery: it is unedited, uncensored,
+        and was handed over on the understanding that it would be cut before anyone saw it.
+      </p>
+
+      <p>
+        So the vault treats it accordingly. Access is restricted, every view is logged, and
+        downloads are disabled by default — taking a copy off-platform is a written request
+        to a named person, not a button. That is deliberately inconvenient, because
+        convenient access to material like this is precisely how platforms end up in the
+        news.
+      </p>
+
+      <div class="note is-gold">
+        <strong>Worth pausing on.</strong> If you build one part of this properly, build
+        this part. Handling of original footage is the single largest reputational and legal
+        exposure the whole venture carries, and it is invisible to members — which is exactly
+        why it gets skipped.
+      </div>
+    </section>
+
+    <section class="sect" id="a-editing">
+      <hr class="hairline">
+      <div class="sect-head"><div class="sect-num">38</div>
+      <div><div class="eyebrow">Part three · the Control Room</div><h2>Editing Desk</h2><span class="route">/admin/editing</span></div></div>
+      <figure class="shot"><div class="frame">
+        <div class="bar"><span class="dots"><i></i><i></i><i></i></span><span class="addr">appendageantics.co.nz/#/admin/editing</span></div>
+        <img src="img/37-admin-editing.webp" alt="Paid editing jobs from order through to delivered cut." width="1800" height="1125" loading="lazy" decoding="async">
+      </div><figcaption><b>Paid editing jobs</b> from order through to delivered cut.</figcaption></figure>
+
+      <p class="lede">
+        The staff side of the editing service — the work queue, who is doing what, and where
+        each job has got to.
+      </p>
+
+      <p>
+        Each order moves through the same stages: received, assigned to an editor, cut,
+        sent to the member as a proof, and either approved or returned for revision. The
+        member sees their half of that on their own Editing screen; this is the other half.
+      </p>
+
+      <p>
+        Turnaround time is the thing being managed here. Editing is the one paid service on
+        the platform where a member is waiting on a person rather than a queue, and a
+        service people have paid for and are waiting on generates complaints faster than
+        anything else.
+      </p>
+    </section>
+
+    <section class="sect" id="a-judging">
+      <hr class="hairline">
+      <div class="sect-head"><div class="sect-num">39</div>
+      <div><div class="eyebrow">Part three · the Control Room</div><h2>Judging</h2><span class="route">/admin/judging</span></div></div>
+      <figure class="shot"><div class="frame">
+        <div class="bar"><span class="dots"><i></i><i></i><i></i></span><span class="addr">appendageantics.co.nz/#/admin/judging</span></div>
+        <img src="img/38-admin-judging.webp" alt="Your six criteria, scored consistently and auditably." width="1800" height="1125" loading="lazy" decoding="async">
+      </div><figcaption><b>Your six criteria</b>, scored consistently and auditably.</figcaption></figure>
+
+      <p class="lede">
+        Where entries are scored against your six judging criteria — and where the
+        competition's credibility is either earned or lost.
+      </p>
+
+      <p>
+        Judges score each entry against the same six criteria, and the panel's scores are
+        recorded separately rather than merged into an unexplained number. With real money
+        attached, "why did that one win" has to have an answer that survives being asked
+        publicly by someone who came second.
+      </p>
+
+      <ol class="walk">
+        <li><b>Scoring against the six criteria</b>, per judge, per entry.</li>
+        <li><b>Recusal.</b> A judge with a connection to an entrant is recorded as recused rather than quietly skipping — a documented conflict is a defence, an undocumented one is an accusation.</li>
+        <li><b>Sealing.</b> Scores are locked before results are published, so nothing can be adjusted after the outcome is known.</li>
+        <li><b>Panel scores held back</b> until the shortlist publishes, so early scores cannot steer the public vote.</li>
+      </ol>
+
+      <div class="note">
+        <strong>The combination that matters.</strong> Member votes and judge scores both
+        feed the result, and how they combine needs to be published and reproducible. Anyone
+        who can add up should be able to check the winner's total. That is stated on the
+        public leaderboard, not just held here.
+      </div>
+    </section>
+
+    <section class="sect" id="a-prizes">
+      <hr class="hairline">
+      <div class="sect-head"><div class="sect-num">40</div>
+      <div><div class="eyebrow">Part three · the Control Room</div><h2>Prizes</h2><span class="route">/admin/prizes</span></div></div>
+      <figure class="shot"><div class="frame">
+        <div class="bar"><span class="dots"><i></i><i></i><i></i></span><span class="addr">appendageantics.co.nz/#/admin/prizes</span></div>
+        <img src="img/39-admin-prizes.webp" alt="Award, verify, pay — with the verification steps shown before money moves." width="1800" height="1125" loading="lazy" decoding="async">
+      </div><figcaption><b>Award, verify, pay</b> — with the verification steps shown before money moves.</figcaption></figure>
+
+      <p class="lede">
+        Every prize on the board, who is in line for it, and what has to be checked before
+        it is paid.
+      </p>
+
+      <p>
+        Prizes are the promise the whole competition rests on, so this screen is built
+        around verification rather than celebration. Each pending prize shows how many
+        verification steps have been completed out of how many are required — eligibility,
+        identity, entry validity, no outstanding reports — and the payment does not proceed
+        until they are done.
+      </p>
+
+      <p>
+        Provisional leaders are labelled as provisional. Where a prize is a pooled refund
+        rather than a named winner, it says so. Both distinctions matter the moment somebody
+        screenshots this and asks why they have not been paid.
+      </p>
+
+      <div class="note">
+        <strong>The cashflow point.</strong> The prize board is a fixed commitment made at
+        launch, payable regardless of how membership revenue actually lands. It is worth
+        modelling the worst case — full prize board, lighter-than-hoped membership — before
+        the amounts are advertised, because they are very hard to walk back afterwards.
+      </div>
+    </section>
+
+    <section class="sect" id="a-promos">
+      <hr class="hairline">
+      <div class="sect-head"><div class="sect-num">41</div>
+      <div><div class="eyebrow">Part three · the Control Room</div><h2>Promotions</h2><span class="route">/admin/promos</span></div></div>
+      <figure class="shot"><div class="frame">
+        <div class="bar"><span class="dots"><i></i><i></i><i></i></span><span class="addr">appendageantics.co.nz/#/admin/promos</span></div>
+        <img src="img/40-admin-promos.webp" alt="The campaign machinery — who qualifies, who has been paid, what is left in the pool." width="1800" height="1125" loading="lazy" decoding="async">
+      </div><figcaption><b>The campaign machinery</b> — who qualifies, who has been paid, what is left in the pool.</figcaption></figure>
+
+      <p class="lede">
+        The operational side of the launch offer and the giveaway — who has qualified, who
+        has been paid, and how many places remain.
+      </p>
+
+      <p>
+        The cashback campaign is a queue with a hard limit: the first 250 qualifying
+        members. That means someone has to know, at any moment, exactly how many places are
+        left and who is next in line — and it has to be the same number members are being
+        shown, or the complaints write themselves.
+      </p>
+
+      <p>
+        The giveaway is handled here too, including running the draw, with the pool of
+        prizes and the winners recorded. Both mechanics are the kind of thing that gets run
+        out of a spreadsheet at first and becomes unmanageable at precisely the moment they
+        succeed.
+      </p>
+    </section>
+
+    <section class="sect" id="a-reports">
+      <hr class="hairline">
+      <div class="sect-head"><div class="sect-num">42</div>
+      <div><div class="eyebrow">Part three · the Control Room</div><h2>Reports</h2><span class="route">/admin/reports</span></div></div>
+      <figure class="shot"><div class="frame">
+        <div class="bar"><span class="dots"><i></i><i></i><i></i></span><span class="addr">appendageantics.co.nz/#/admin/reports</span></div>
+        <img src="img/41-admin-reports.webp" alt="Member reports and complaints, with an audit trail attached." width="1800" height="1125" loading="lazy" decoding="async">
+      </div><figcaption><b>Member reports and complaints</b>, with an audit trail attached.</figcaption></figure>
+
+      <p class="lede">
+        When a member reports content or another member, it lands here — and every one gets
+        an answer.
+      </p>
+
+      <p>
+        Reports are triaged by seriousness, because they are not equivalent. Someone finding
+        an entry unfunny and someone alleging that footage was published without consent
+        both arrive through the same form and need very different response times.
+      </p>
+
+      <p>
+        Each report carries its history: what was reported, by whom, what was decided, who
+        decided it, and when. On a platform of this kind that record is not bureaucracy —
+        it is the evidence that you acted, and the thing you would be asked for first if
+        anyone ever came asking.
+      </p>
+    </section>
+
+    <section class="sect" id="a-support">
+      <hr class="hairline">
+      <div class="sect-head"><div class="sect-num">43</div>
+      <div><div class="eyebrow">Part three · the Control Room</div><h2>Support Desk</h2><span class="route">/admin/support</span></div></div>
+      <figure class="shot"><div class="frame">
+        <div class="bar"><span class="dots"><i></i><i></i><i></i></span><span class="addr">appendageantics.co.nz/#/admin/support</span></div>
+        <img src="img/42-admin-support.webp" alt="Tickets, response times and who is on the hook for each one." width="1800" height="1125" loading="lazy" decoding="async">
+      </div><figcaption><b>Tickets, response times and who is on the hook</b> for each one.</figcaption></figure>
+
+      <p class="lede">
+        Every enquiry from the contact form, as a numbered ticket measured against the
+        response target published on the public site.
+      </p>
+
+      <p>
+        This is the other end of the Contact page. The targets promised out there are shown
+        in here as a clock: how long each ticket has been open, which are approaching their
+        target, and which have missed it.
+      </p>
+
+      <p>
+        Tickets are categorised the same way members categorise them — billing, technical,
+        moderation appeals, competition queries — so the desk can see at a glance where the
+        volume actually comes from. That pattern is genuinely useful information: a spike in
+        billing tickets usually means something on the Memberships page is unclear, not that
+        members have become confused.
+      </p>
+    </section>
+
+    <section class="sect" id="a-comms">
+      <hr class="hairline">
+      <div class="sect-head"><div class="sect-num">44</div>
+      <div><div class="eyebrow">Part three · the Control Room</div><h2>Communications</h2><span class="route">/admin/communications</span></div></div>
+      <figure class="shot"><div class="frame">
+        <div class="bar"><span class="dots"><i></i><i></i><i></i></span><span class="addr">appendageantics.co.nz/#/admin/communications</span></div>
+        <img src="img/43-admin-comms.webp" alt="Every automated message the platform sends, catalogued and editable." width="1800" height="1125" loading="lazy" decoding="async">
+      </div><figcaption><b>Every automated message the platform sends</b>, catalogued and editable.</figcaption></figure>
+
+      <p class="lede">
+        A catalogue of every automated message the platform sends — what triggers it, who
+        receives it, and what it says.
+      </p>
+
+      <p>
+        Welcome emails, purchase confirmations, entry approved, entry rejected, payment
+        taken, membership expiring, cashback qualified, prize won. Dozens of messages, each
+        fired by an event, each landing in someone's inbox with your name on it.
+      </p>
+
+      <p>
+        Collecting them in one place makes the tone consistent and the whole set reviewable.
+        Automated email is where a brand voice quietly dies: the site is funny and the
+        receipt reads like a parking fine. It is also the only way to answer "what exactly
+        do we send people, and when" without reading the source code.
+      </p>
+    </section>
+
+    <section class="sect" id="a-revenue">
+      <hr class="hairline">
+      <div class="sect-head"><div class="sect-num">45</div>
+      <div><div class="eyebrow">Part three · the Control Room</div><h2>Revenue Model</h2><span class="route">/admin/revenue</span></div></div>
+      <figure class="shot"><div class="frame">
+        <div class="bar"><span class="dots"><i></i><i></i><i></i></span><span class="addr">appendageantics.co.nz/#/admin/revenue</span></div>
+        <img src="img/44-admin-revenue.webp" alt="Your own revenue model, rendered as a working screen." width="1800" height="1125" loading="lazy" decoding="async">
+      </div><figcaption><b>Your own revenue model</b>, rendered as a working screen.</figcaption></figure>
+
+      <p class="lede">
+        Your own revenue model, built into the platform as a live screen rather than left in
+        a spreadsheet.
+      </p>
+
+      <p>
+        Membership revenue by tier and division, book sales, editing income, set against the
+        campaign refunds and the prize commitments. It is your model, using your figures —
+        rendered so the numbers move when the inputs do.
+      </p>
+
+      <div class="note is-gold">
+        <strong>Three things Mark will want to talk through.</strong> The model as supplied
+        prices Blokes Expert at a figure your store no longer charges. The GST deduction is
+        calculated on the pre-refund figure rather than the net. And storage, transcoding and
+        streaming — the costs that grow in direct proportion to how well the competition
+        goes — are not in it at all. None of these are difficult to fix, but all three make
+        the picture look better than it is, and the third one gets worse precisely when
+        everything else is going right.
+      </div>
+    </section>
+
+    <!-- =============================================================
+         CLOSING
+         ============================================================= -->
+    <section class="sect" id="whats-real">
+      <hr class="hairline">
+      <div class="sect-head">
+        <div class="sect-num">46</div>
+        <div><div class="eyebrow">Closing</div><h2>What's real, what's illustrative</h2></div>
+      </div>
+
+      <p class="lede">
+        Worth being precise about, so nothing in this tour is mistaken for something it is
+        not.
+      </p>
+
+      <h3>Real</h3>
+      <ul class="plain">
+        <li>Every screen shown here exists and can be clicked through, in any browser, right now.</li>
+        <li>The structure — how the books, competition, memberships and staff tools relate — is worked out in full, not sketched.</li>
+        <li>Your content is used as supplied: the brand, both award shows, the book titles, the tier names and prices, the prize board, the division structure, the entry requirements, the judging criteria and the About copy.</li>
+        <li>The arithmetic is consistent. Tier totals, prize amounts, campaign figures and leaderboard scores all agree with each other, across every page they appear on. Two independent reviewers went looking for contradictions specifically.</li>
+      </ul>
+
+      <h3>Illustrative</h3>
+      <ul class="plain">
+        <li><b>Every person.</b> All members, entrants, commenters and staff are invented. None of them exist.</li>
+        <li><b>Every statistic.</b> Member counts, votes, sales figures and rankings are plausible fabrications chosen to make the screens legible.</li>
+        <li><b>All 49 comments</b>, all entry titles, and all six challenge categories are ours, written to demonstrate tone.</li>
+        <li><b>The New Zealand setting</b> is an assumption, not a decision you have made.</li>
+      </ul>
+
+      <h3>Not built at all</h3>
+      <ul class="plain">
+        <li><b>Payments.</b> Carts total correctly; no money moves and no card details are collected. An R18 platform needs a processor willing to take that business, at rates that reflect it.</li>
+        <li><b>Video.</b> No upload, storage, transcoding or playback. This is the largest ongoing cost in the whole venture and the one that grows with success.</li>
+        <li><b>Identity and age verification.</b> Self-declaration stands in for what would be a third-party service.</li>
+        <li><b>Email.</b> The message catalogue lists what would be sent; nothing sends.</li>
+        <li><b>Persistence.</b> Nothing is saved. Refresh the page and every decision resets.</li>
+      </ul>
+
+      <div class="note is-gold">
+        <strong>Why the gaps are labelled on screen rather than hidden.</strong> A prototype
+        that pretends to take payments is a prototype that gets someone's hopes up about a
+        number that has not been checked. Naming each gap where it occurs keeps this useful
+        as a planning document as well as a demonstration — the disclaimers are where the
+        real budget conversation starts.
+      </div>
+    </section>
+
+    <section class="sect" id="next">
+      <hr class="hairline">
+      <div class="sect-head">
+        <div class="sect-num">47</div>
+        <div><div class="eyebrow">Closing</div><h2>Where this could go next</h2></div>
+      </div>
+
+      <p class="lede">
+        The prototype's job was to make the concept concrete enough to make decisions
+        about. Here is what it has surfaced.
+      </p>
+
+      <p>
+        Building this out revealed that the venture is really two businesses with very
+        different cost profiles. Selling an e-book series is a modest, well-understood
+        operation. Running an R18 user-generated video competition is a substantially larger
+        one, and almost all of its cost sits in the three things this prototype could not
+        build: payment processing at high-risk rates, age and identity verification, and
+        video storage and streaming — plus the moderation effort the Control Room makes
+        visible.
+      </p>
+
+      <p>
+        That is worth knowing before committing, and it points at an obvious sequencing
+        question: whether the books go first to prove the audience, with the competition
+        platform following once there is a population to compete. Mark will take you through
+        that properly, with numbers.
+      </p>
+
+      <h3>Decisions this raised that are yours</h3>
+      <ul class="plain">
+        <li>Four places where your store prices and your tier tables disagree.</li>
+        <li>One tier that currently offers fewer perks than a cheaper one, and another division where the pricing runs the opposite way.</li>
+        <li>Volume Five carrying two different titles across your materials.</li>
+        <li>Whether New Zealand is the target market or a placeholder.</li>
+        <li>The three gaps in the revenue model noted on the previous screen.</li>
+      </ul>
+
+      <h3>Assets that would sharpen it</h3>
+      <ul class="plain">
+        <li>Text-free re-exports of the hero artwork — the current versions have headlines and a painted-on button baked into the image.</li>
+        <li>Crest and badge artwork with transparent backgrounds.</li>
+        <li>Real emblems for each division, rather than the shared mark standing in for both.</li>
+        <li>Community photography, for the sections that currently lean on illustration.</li>
+      </ul>
+
+      <p>
+        None of these are obstacles. They are the ordinary list of things that turn a
+        convincing prototype into a launchable product, and the fact that the list is this
+        short is the most encouraging thing in this document.
+      </p>
+    </section>
+
+    <footer class="end">
+      Appendage Antics — guided tour of the clickable prototype. Prepared August 2026.
+      Every member, entry, comment and statistic shown is invented for demonstration.
+    </footer>
+
+  </div>
+  </main>
+</div>
+
+</body>
+</html>
