@@ -1,0 +1,1008 @@
+<!doctype html>
+<html lang="en-NZ">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="color-scheme" content="dark">
+<style>html{color-scheme:dark}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+</head>
+<body>
+<title>Before We Build</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=Inter:wght@400;500;600;700&display=swap">
+<style>
+:root{
+  --ink:#0b0b0d;
+  --surface:#16161a;
+  --raised:#1e1e24;
+  --sunk:#111114;
+  --hairline:rgba(242,237,228,.09);
+  --hairline-strong:rgba(242,237,228,.16);
+  --gold:#d4af37;
+  --gold-bright:#f0c75e;
+  --gold-deep:#8f6b29;
+  --gold-wash:rgba(212,175,55,.07);
+  --cream:#f2ede4;
+  --body:#cbc6bc;
+  --dim:#9c978c;
+  --flag:#e08477;
+  --flag-wash:rgba(224,132,119,.09);
+  --ok:#83bd9b;
+  --font-display:'Cinzel','Times New Roman',serif;
+  --font-sans:'Inter',ui-sans-serif,system-ui,-apple-system,sans-serif;
+  --prose:66ch;
+}
+
+*,*::before,*::after{box-sizing:border-box}
+body{
+  background:
+    radial-gradient(1100px 520px at 50% -8%,rgba(212,175,55,.07),transparent 62%),
+    var(--ink);
+  color:var(--body);
+  font-family:var(--font-sans);
+  font-size:16px;line-height:1.62;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:820px;margin:0 auto;padding:0 26px 110px}
+
+h1,h2,h3{color:var(--cream);margin:0;text-wrap:balance}
+h1{font-family:var(--font-display);font-weight:900;font-size:clamp(30px,5vw,44px);
+  line-height:1.1;letter-spacing:.03em;text-transform:uppercase;color:var(--gold-bright)}
+h2{font-family:var(--font-display);font-weight:700;font-size:clamp(20px,3vw,26px);
+  line-height:1.22;letter-spacing:.03em}
+h3{font-family:var(--font-sans);font-weight:600;font-size:17px;line-height:1.4;color:var(--cream)}
+p{margin:0}
+strong{color:var(--cream);font-weight:600}
+ul{margin:0;padding-left:1.15em}
+li{margin:.32em 0}
+li::marker{color:var(--gold-deep)}
+a{color:var(--gold);text-decoration:none;border-bottom:1px solid rgba(212,175,55,.3)}
+a:hover{color:var(--gold-bright)}
+
+.eyebrow{font-size:11px;font-weight:600;letter-spacing:.24em;text-transform:uppercase;color:var(--dim)}
+.eyebrow.gold{color:var(--gold)}
+.lede{font-size:18px;line-height:1.6;color:var(--body)}
+.note{font-size:14px;color:var(--dim)}
+
+/* masthead */
+.mast{padding:58px 0 34px;display:flex;flex-direction:column;gap:16px;
+  border-bottom:1px solid var(--hairline-strong);max-width:var(--prose)}
+.rule{height:1px;border:0;width:100%;margin:0;
+  background:linear-gradient(90deg,rgba(212,175,55,.55),rgba(212,175,55,.06))}
+
+section{padding-top:52px}
+.sechead{display:flex;flex-direction:column;gap:9px;margin-bottom:20px;max-width:var(--prose)}
+.flow{display:flex;flex-direction:column;gap:15px;max-width:var(--prose)}
+
+/* progress bar */
+.tracker{
+  position:sticky;top:0;z-index:5;background:var(--sunk);
+  border:1px solid var(--hairline);border-top:0;
+  padding:11px 16px;display:flex;flex-wrap:wrap;align-items:center;gap:12px;
+  font-size:13px;
+}
+.tracker .count{font-weight:600;color:var(--cream)}
+.tracker .meter{flex:1 1 130px;height:4px;background:var(--raised);min-width:110px}
+.tracker .meter i{display:block;height:100%;background:var(--gold);width:0}
+
+/* question groups */
+.group{margin-top:26px;border:1px solid var(--hairline);background:var(--surface)}
+.group > header{
+  padding:16px 20px;border-bottom:1px solid var(--hairline);background:var(--raised);
+  display:flex;flex-direction:column;gap:5px;
+}
+.group > header h3{font-family:var(--font-display);font-weight:700;font-size:19px;
+  letter-spacing:.03em;color:var(--gold-bright)}
+.group > header .why{font-size:13.5px;color:var(--dim)}
+.q{padding:18px 20px;border-bottom:1px solid var(--hairline);
+  display:flex;flex-direction:column;gap:10px}
+.q:last-child{border-bottom:0}
+.q .head{display:flex;gap:11px;align-items:baseline;flex-wrap:wrap}
+.q .id{font-size:12px;font-weight:700;color:var(--gold);letter-spacing:.06em;min-width:26px}
+.q .ask{flex:1 1 240px;color:var(--cream);font-weight:500;font-size:15.5px;line-height:1.45}
+.q .sub{font-size:13.5px;color:var(--dim);padding-left:37px}
+
+.must,.help{
+  font-size:9.5px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;
+  padding:3px 7px;border:1px solid currentColor;white-space:nowrap;
+}
+.must{color:var(--gold);background:var(--gold-wash)}
+.help{color:var(--dim)}
+
+.opts{display:flex;flex-direction:column;gap:2px;padding-left:37px}
+.opts label{
+  display:flex;gap:10px;align-items:flex-start;padding:8px 11px;
+  border:1px solid transparent;cursor:pointer;font-size:14.5px;line-height:1.45;
+  transition:background .12s,border-color .12s;
+}
+.opts label:hover{background:var(--raised)}
+.opts input{margin:5px 0 0;accent-color:var(--gold);flex:0 0 auto}
+.opts input:checked + span{color:var(--cream)}
+.opts label:has(input:checked){border-color:rgba(212,175,55,.35);background:var(--gold-wash)}
+
+textarea,input[type=text]{
+  width:calc(100% - 37px);margin-left:37px;
+  background:var(--ink);color:var(--cream);
+  border:1px solid var(--hairline);padding:11px 13px;
+  font-family:var(--font-sans);font-size:15px;line-height:1.55;resize:vertical;
+}
+textarea{min-height:76px}
+textarea:focus,input[type=text]:focus,.opts label:focus-within{
+  outline:none;border-color:rgba(212,175,55,.6)}
+.opts label:focus-within{border-color:rgba(212,175,55,.6)}
+textarea::placeholder,input::placeholder{color:#5f5b55}
+
+/* risks */
+.risk{
+  border:1px solid var(--hairline);border-left:2px solid var(--flag);
+  background:var(--surface);padding:17px 20px;display:flex;flex-direction:column;gap:8px;
+}
+.risk h3{font-size:16.5px}
+.risk .tagline{font-size:13px;color:var(--flag);font-weight:600;
+  letter-spacing:.1em;text-transform:uppercase}
+.risks{display:flex;flex-direction:column;gap:12px;max-width:var(--prose)}
+
+.good{border-left-color:var(--ok)}
+.good .tagline{color:var(--ok)}
+
+/* export */
+.export{
+  margin-top:34px;border:1px solid rgba(212,175,55,.35);background:var(--surface);
+  padding:22px;display:flex;flex-direction:column;gap:14px;
+}
+.export h3{font-family:var(--font-display);font-weight:700;letter-spacing:.03em;
+  color:var(--gold-bright);font-size:19px}
+button{
+  font-family:var(--font-sans);font-size:13px;font-weight:600;letter-spacing:.1em;
+  text-transform:uppercase;padding:12px 20px;cursor:pointer;
+  background:var(--gold);color:var(--ink);border:1px solid var(--gold);
+  align-self:flex-start;transition:background .15s;
+}
+button:hover{background:var(--gold-bright)}
+button.ghost{background:transparent;color:var(--body);border-color:var(--hairline-strong)}
+button.ghost:hover{background:var(--raised);color:var(--cream)}
+.btnrow{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+#out{
+  width:100%;min-height:190px;margin-left:0;font-size:13.5px;
+  font-family:ui-monospace,Consolas,monospace;
+}
+#msg{font-size:14px;color:var(--ok);min-height:20px}
+#msg.bad{color:var(--flag)}
+#msg.working{color:var(--dim)}
+
+.who{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.who label{display:flex;flex-direction:column;gap:6px;font-size:11px;font-weight:600;
+  letter-spacing:.16em;text-transform:uppercase;color:var(--dim)}
+.who input{width:100%;margin-left:0}
+@media (max-width:560px){.who{grid-template-columns:1fr}}
+
+.sent{border-color:rgba(131,189,155,.45)}
+.sent h3{color:var(--ok)}
+
+.foot{margin-top:60px;padding-top:22px;border-top:1px solid var(--hairline-strong);
+  max-width:var(--prose);display:flex;flex-direction:column;gap:11px}
+
+:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+@media (max-width:620px){
+  .wrap{padding:0 16px 80px}
+  .q .sub,.opts,textarea,input[type=text]{padding-left:0;margin-left:0;width:100%}
+  .opts{padding-left:0}
+}
+</style>
+
+<div class="wrap">
+
+<header class="mast">
+  <div class="eyebrow gold">Appendage Antics</div>
+  <h1>Before We Build</h1>
+  <hr class="rule">
+  <p class="lede">You've seen the prototype. This is what we need to know from you — and what you need
+    to know from us — before anyone writes the real thing.</p>
+  <p>The prototype answered the question <em>"what could this look like?"</em>. It looks good, and the
+    concept holds together. This document answers the harder question: <strong>what does it take to
+    actually run it, and what would it cost you?</strong></p>
+  <p>There are two halves. First a set of questions — some are quick confirmations of decisions we
+    already made on your behalf, a handful genuinely decide the shape of the whole build. Then a plain
+    account of the risks and costs we've found, including a few in your own numbers. None of it is
+    meant to put you off. It's the stuff that's cheaper to face now than in month nine.</p>
+  <p class="note">Answer what you can. Questions marked <span class="must">Essential</span> are the ones
+    we can't start without. Your answers save as you type, so you can stop and come back — and there's a
+    Send button at the bottom when you're done.</p>
+</header>
+
+<section id="questions">
+  <div class="sechead">
+    <div class="eyebrow">Part one</div>
+    <h2>What we need from you</h2>
+  </div>
+
+  <div class="tracker" role="status" aria-live="polite">
+    <span class="count"><span id="done">0</span> of <span id="total">14</span> essential answered</span>
+    <span class="meter"><i id="bar"></i></span>
+    <span class="note" id="saved">Answers save in this browser as you type</span>
+  </div>
+
+  <!-- A -->
+  <div class="group">
+    <header>
+      <h3>A · The videos</h3>
+      <p class="why">The single most important question in this document. Everything else — who can
+        process your payments, where you're allowed to operate, what it costs to run — depends on the
+        answer, and the difference between the mildest and the strongest version is roughly ten times
+        the cost.</p>
+    </header>
+
+    <div class="q">
+      <div class="head"><span class="id">A1</span><span class="ask">Which best describes what entrants
+        will actually upload?</span><span class="must">Essential</span></div>
+      <div class="opts" data-q="A1" data-essential="1" data-label="What entrants will upload">
+        <label><input type="radio" name="A1" value="Suggestive but clothed — no nudity"><span><strong>Suggestive but clothed.</strong> Comedy, innuendo, props — no nudity at all.</span></label>
+        <label><input type="radio" name="A1" value="Nudity, but not sexual"><span><strong>Nudity, but not sexual.</strong> Bodies visible; nothing sexually explicit.</span></label>
+        <label><input type="radio" name="A1" value="Sexually explicit"><span><strong>Sexually explicit.</strong> Adult content in the full sense.</span></label>
+        <label><input type="radio" name="A1" value="A mix, depending on the category"><span><strong>A mix</strong>, depending on the challenge category.</span></label>
+        <label><input type="radio" name="A1" value="Not decided yet"><span><strong>Not decided yet.</strong></span></label>
+      </div>
+    </div>
+
+    <div class="q">
+      <div class="head"><span class="id">A2</span><span class="ask">Describe the most explicit clip you
+        would happily publish.</span><span class="must">Essential</span></div>
+      <p class="sub">An example, not a rating — a sentence describing a video you'd be pleased to have
+        win a category. This is the line everything gets built around.</p>
+      <textarea data-q="A2" data-essential="1" data-label="Most explicit clip you would publish" placeholder="For example: a contestant does X, wearing Y, and the camera shows…"></textarea>
+    </div>
+
+    <div class="q">
+      <div class="head"><span class="id">A3</span><span class="ask">Describe the first thing you'd
+        reject.</span><span class="must">Essential</span></div>
+      <p class="sub">Where does an entry stop being funny and start being a problem for you?</p>
+      <textarea data-q="A3" data-essential="1" data-label="First thing you would reject"></textarea>
+    </div>
+
+    <div class="q">
+      <div class="head"><span class="id">A4</span><span class="ask">Will people other than the entrant
+        appear in the videos?</span><span class="must">Essential</span></div>
+      <p class="sub">Partners, mates, bystanders. This decides how heavy the consent process has to be —
+        see risk 3 below.</p>
+      <div class="opts" data-q="A4" data-essential="1" data-label="Other people appearing in videos">
+        <label><input type="radio" name="A4" value="No — entrant only, and that will be a rule"><span>No — entrant only, and we'll make that a rule</span></label>
+        <label><input type="radio" name="A4" value="Sometimes, and that is fine"><span>Sometimes, and that's fine</span></label>
+        <label><input type="radio" name="A4" value="Yes, often — group entries are part of the fun"><span>Yes, often — group entries are part of the fun</span></label>
+      </div>
+    </div>
+  </div>
+
+  <!-- B -->
+  <div class="group">
+    <header>
+      <h3>B · Where you'll operate</h3>
+      <p class="why">Age-verification law now differs sharply by country, and each market you open adds
+        cost and obligation. Starting narrow is cheaper and completely reversible; starting wide is
+        neither.</p>
+    </header>
+
+    <div class="q">
+      <div class="head"><span class="id">B1</span><span class="ask">Which countries should be able to
+        join and buy at launch?</span><span class="must">Essential</span></div>
+      <p class="sub">Tick the smallest set you'd be happy launching with. More can be added later.</p>
+      <div class="opts" data-q="B1" data-essential="1" data-label="Launch markets" data-multi="1">
+        <label><input type="checkbox" name="B1" value="New Zealand"><span>New Zealand</span></label>
+        <label><input type="checkbox" name="B1" value="Australia"><span>Australia</span></label>
+        <label><input type="checkbox" name="B1" value="United Kingdom"><span>United Kingdom</span></label>
+        <label><input type="checkbox" name="B1" value="United States"><span>United States</span></label>
+        <label><input type="checkbox" name="B1" value="Europe"><span>Europe</span></label>
+        <label><input type="checkbox" name="B1" value="Anywhere — worldwide from day one"><span>Anywhere — worldwide from day one</span></label>
+      </div>
+    </div>
+
+    <div class="q">
+      <div class="head"><span class="id">B2</span><span class="ask">Is New Zealand the right home
+        market?</span><span class="must">Essential</span></div>
+      <p class="sub">The prototype is written in a New Zealand voice throughout — that was our
+        assumption, never confirmed. It's a cheap change now and an expensive one later.</p>
+      <div class="opts" data-q="B2" data-essential="1" data-label="Home market">
+        <label><input type="radio" name="B2" value="Yes — New Zealand"><span>Yes — New Zealand</span></label>
+        <label><input type="radio" name="B2" value="No — somewhere else (see notes)"><span>No — somewhere else</span></label>
+        <label><input type="radio" name="B2" value="Deliberately international, no home flavour"><span>Deliberately international, with no local flavour</span></label>
+      </div>
+      <textarea data-q="B2n" data-label="Home market — notes" placeholder="If not New Zealand, where?"></textarea>
+    </div>
+  </div>
+
+  <!-- C -->
+  <div class="group">
+    <header>
+      <h3>C · The business behind it</h3>
+      <p class="why">A platform that takes payments, holds identity documents and publishes other
+        people's videos needs a legal entity standing behind it. Who that is changes what we build and
+        how.</p>
+    </header>
+
+    <div class="q">
+      <div class="head"><span class="id">C1</span><span class="ask">Who will legally own and operate
+        the platform?</span><span class="must">Essential</span></div>
+      <p class="sub">A registered company, a sole trader, something not yet formed? If a company exists,
+        what's its name and where is it registered?</p>
+      <textarea data-q="C1" data-essential="1" data-label="Legal owner / operator"></textarea>
+    </div>
+
+    <div class="q">
+      <div class="head"><span class="id">C2</span><span class="ask">What budget is available for the
+        things that must be paid for before launch?</span><span class="must">Essential</span></div>
+      <p class="sub">Legal drafting, payment-processor setup, age-verification, a security review. These
+        are not development costs — they're third parties who invoice regardless.</p>
+      <div class="opts" data-q="C2" data-essential="1" data-label="Pre-launch compliance budget">
+        <label><input type="radio" name="C2" value="Under NZ$10,000"><span>Under NZ$10,000</span></label>
+        <label><input type="radio" name="C2" value="NZ$10,000 – 30,000"><span>NZ$10,000 – 30,000</span></label>
+        <label><input type="radio" name="C2" value="NZ$30,000 – 75,000"><span>NZ$30,000 – 75,000</span></label>
+        <label><input type="radio" name="C2" value="More than NZ$75,000"><span>More than NZ$75,000</span></label>
+        <label><input type="radio" name="C2" value="Nothing up front — it has to come out of revenue"><span>Nothing up front — it has to come out of revenue</span></label>
+      </div>
+    </div>
+
+    <div class="q">
+      <div class="head"><span class="id">C3</span><span class="ask">Are you happy to launch in
+        stages?</span><span class="must">Essential</span></div>
+      <p class="sub">Our recommendation: the e-book shop first and trading within a couple of months,
+        memberships second, the video competition last. Each stage funds the next and proves there's an
+        audience before the expensive parts get built.</p>
+      <div class="opts" data-q="C3" data-essential="1" data-label="Staged launch">
+        <label><input type="radio" name="C3" value="Yes — books first, then memberships, then the competition"><span>Yes — books first, then memberships, then the competition</span></label>
+        <label><input type="radio" name="C3" value="Prefer everything to launch together"><span>I'd prefer everything to launch together</span></label>
+        <label><input type="radio" name="C3" value="Want to discuss"><span>I'd like to talk this one through</span></label>
+      </div>
+    </div>
+
+    <div class="q">
+      <div class="head"><span class="id">C4</span><span class="ask">Is there a date this has to be live
+        by, and what fixes it?</span><span class="help">Helpful</span></div>
+      <textarea data-q="C4" data-label="Target launch date"></textarea>
+    </div>
+  </div>
+
+  <!-- D -->
+  <div class="group">
+    <header>
+      <h3>D · Pricing and money</h3>
+      <p class="why">Real billing can't be ambiguous the way a prototype can. A few of these are things
+        we noticed in your own material and deliberately left alone rather than change without asking.</p>
+    </header>
+
+    <div class="q">
+      <div class="head"><span class="id">D1</span><span class="ask">Is a membership tier a subscription
+        that renews, or a single up-front payment?</span><span class="must">Essential</span></div>
+      <p class="sub">Your material describes it both ways in different places, and the prototype
+        inherited that. It changes the checkout, the terms and the accounting.</p>
+      <div class="opts" data-q="D1" data-essential="1" data-label="Billing model">
+        <label><input type="radio" name="D1" value="A subscription that renews automatically"><span>A subscription that renews automatically</span></label>
+        <label><input type="radio" name="D1" value="A single up-front payment for a fixed term"><span>A single up-front payment for a fixed term</span></label>
+        <label><input type="radio" name="D1" value="Monthly instalments, fixed number, then it ends"><span>Monthly instalments, a fixed number, then it ends</span></label>
+        <label><input type="radio" name="D1" value="Not sure — advise me"><span>Not sure — advise me</span></label>
+      </div>
+    </div>
+
+    <div class="q">
+      <div class="head"><span class="id">D2</span><span class="ask">The 75% cashback — what exactly
+        triggers it, and what is it paid out of?</span><span class="must">Essential</span></div>
+      <p class="sub">Cash back to a card, or credit on the site? Paid from the book price or the
+        membership? We need the precise rule — and payment processors look closely at rebate schemes,
+        so how it's worded matters as well as how it works.</p>
+      <textarea data-q="D2" data-essential="1" data-label="Cashback mechanics"></textarea>
+    </div>
+
+    <div class="q">
+      <div class="head"><span class="id">D3</span><span class="ask">Blokes Intermediate costs more than
+        Advanced and offers less. Intentional?</span><span class="help">Helpful</span></div>
+      <p class="sub">$30/month × 6 = $180 for Intermediate, against $25/month × 6 = $150 for Advanced,
+        which carries more perks. Nobody would rationally choose Intermediate. We've raised this three
+        times internally and left your numbers untouched each time — it's yours to rule on.</p>
+      <div class="opts" data-q="D3" data-label="Intermediate tier pricing">
+        <label><input type="radio" name="D3" value="Intentional — leave it"><span>Intentional — leave it</span></label>
+        <label><input type="radio" name="D3" value="Not intentional — reprice Intermediate"><span>Not intentional — reprice Intermediate</span></label>
+        <label><input type="radio" name="D3" value="Not intentional — remove the tier"><span>Not intentional — remove the tier</span></label>
+        <label><input type="radio" name="D3" value="Advise me"><span>Advise me</span></label>
+      </div>
+    </div>
+
+    <div class="q">
+      <div class="head"><span class="id">D4</span><span class="ask">Gals Advanced ($70) costs more than
+        Gals Expert ($60). Intentional?</span><span class="help">Helpful</span></div>
+      <p class="sub">The Gals ladder runs the opposite way to the Blokes one at the top.</p>
+      <div class="opts" data-q="D4" data-label="Gals tier pricing">
+        <label><input type="radio" name="D4" value="Intentional"><span>Intentional</span></label>
+        <label><input type="radio" name="D4" value="Not intentional — correct it"><span>Not intentional — correct it</span></label>
+      </div>
+    </div>
+
+    <div class="q">
+      <div class="head"><span class="id">D5</span><span class="ask">Who funds the $4,000 grand prize,
+        and when is it set aside?</span><span class="help">Helpful</span></div>
+      <p class="sub">Prize money that's promised publicly usually needs to be real and ring-fenced
+        before entries open.</p>
+      <textarea data-q="D5" data-label="Prize funding"></textarea>
+    </div>
+  </div>
+
+  <!-- E -->
+  <div class="group">
+    <header>
+      <h3>E · The books</h3>
+      <p class="why">If we build in stages, the e-book shop is first and it's the whole revenue proof.
+        It needs five real files.</p>
+    </header>
+
+    <div class="q">
+      <div class="head"><span class="id">E1</span><span class="ask">Are the five volumes actually
+        written?</span><span class="must">Essential</span></div>
+      <div class="opts" data-q="E1" data-essential="1" data-label="Manuscript status">
+        <label><input type="radio" name="E1" value="All five are finished"><span>All five are finished</span></label>
+        <label><input type="radio" name="E1" value="Some are finished"><span>Some are finished</span></label>
+        <label><input type="radio" name="E1" value="Volume one only"><span>Volume one only</span></label>
+        <label><input type="radio" name="E1" value="None finished yet"><span>None finished yet</span></label>
+      </div>
+      <textarea data-q="E1n" data-label="Manuscripts — detail" placeholder="Which ones, and in what format — Word, PDF, ePub?"></textarea>
+    </div>
+
+    <div class="q">
+      <div class="head"><span class="id">E2</span><span class="ask">Do you hold full rights to the text
+        and the artwork?</span><span class="must">Essential</span></div>
+      <p class="sub">Written by you, ghostwritten, co-authored, AI-assisted, commissioned art — all fine,
+        we just need to know, because it affects what the terms of sale can promise.</p>
+      <textarea data-q="E2" data-essential="1" data-label="Rights to text and artwork"></textarea>
+    </div>
+
+    <div class="q">
+      <div class="head"><span class="id">E3</span><span class="ask">Volume five: "Champion of Chaos" or
+        "Hall of Fame Antics"?</span><span class="help">Helpful</span></div>
+      <p class="sub">Your poster says one, your series page says the other. We went with Hall of Fame
+        Antics.</p>
+      <div class="opts" data-q="E3" data-label="Volume five title">
+        <label><input type="radio" name="E3" value="Hall of Fame Antics"><span>Hall of Fame Antics</span></label>
+        <label><input type="radio" name="E3" value="Champion of Chaos"><span>Champion of Chaos</span></label>
+      </div>
+    </div>
+  </div>
+
+  <!-- F -->
+  <div class="group">
+    <header>
+      <h3>F · The competition</h3>
+      <p class="why">Three of these confirm calls we made to resolve contradictions in your own material.
+        If you disagree with any of them, now is the cheap moment to say so.</p>
+    </header>
+
+    <div class="q">
+      <div class="head"><span class="id">F1</span><span class="ask">Season One finishes at the September
+        gala; the $4,000 Overall Champion is decided when the 24-month window closes in 2028. Right
+        call?</span><span class="help">Helpful</span></div>
+      <p class="sub">Your material announced the grand prize at the gala but ran the competition until
+        2028. This was our way of making both true.</p>
+      <div class="opts" data-q="F1" data-label="Season One / 2028 split">
+        <label><input type="radio" name="F1" value="Yes — that's right"><span>Yes — that's right</span></label>
+        <label><input type="radio" name="F1" value="No — everything settles at the gala"><span>No — everything settles at the gala</span></label>
+        <label><input type="radio" name="F1" value="Something else"><span>Something else</span></label>
+      </div>
+    </div>
+
+    <div class="q">
+      <div class="head"><span class="id">F2</span><span class="ask">A division-neutral awards umbrella,
+        with your two show names kept beneath it. Right call?</span><span class="help">Helpful</span></div>
+      <p class="sub">Otherwise a Gals winner receives a Blokes-named trophy. Your Triumphant Todger and
+        Triumphant Catlady names survive intact per division.</p>
+      <div class="opts" data-q="F2" data-label="Awards umbrella">
+        <label><input type="radio" name="F2" value="Yes — keep the neutral umbrella"><span>Yes — keep the neutral umbrella</span></label>
+        <label><input type="radio" name="F2" value="No — one name across everything"><span>No — one name across everything</span></label>
+      </div>
+    </div>
+
+    <div class="q">
+      <div class="head"><span class="id">F3</span><span class="ask">Who are the judges, and are they
+        real people who've agreed?</span><span class="must">Essential</span></div>
+      <p class="sub">The prototype's panel is invented. A real competition needs real judges, named in
+        the terms.</p>
+      <textarea data-q="F3" data-essential="1" data-label="Judges"></textarea>
+    </div>
+
+    <div class="q">
+      <div class="head"><span class="id">F4</span><span class="ask">How much should public voting count
+        towards the result?</span><span class="help">Helpful</span></div>
+      <p class="sub">We modelled half public vote, half judging panel. Worth knowing that the more the
+        public vote counts, the more it will be gamed — and the more it looks like chance rather than
+        skill, which has legal implications for prize competitions.</p>
+      <div class="opts" data-q="F4" data-label="Public vote weighting">
+        <label><input type="radio" name="F4" value="Half and half, as modelled"><span>Half and half, as modelled</span></label>
+        <label><input type="radio" name="F4" value="Judges should count for more"><span>Judges should count for more</span></label>
+        <label><input type="radio" name="F4" value="Public vote should count for more"><span>Public vote should count for more</span></label>
+        <label><input type="radio" name="F4" value="Judges only"><span>Judges only</span></label>
+      </div>
+    </div>
+  </div>
+
+  <!-- G -->
+  <div class="group">
+    <header>
+      <h3>G · Who runs it day to day</h3>
+      <p class="why">This is the part that isn't software and can't be automated away. It's also the
+        largest ongoing cost in the whole business.</p>
+    </header>
+
+    <div class="q">
+      <div class="head"><span class="id">G1</span><span class="ask">Who will watch every video before it
+        goes live?</span><span class="must">Essential</span></div>
+      <p class="sub">Every single one, by a person, before the public sees it. At a thousand entrants
+        submitting ten videos each, that's ten thousand reviews. Is that you, a hire, an agency?</p>
+      <textarea data-q="G1" data-essential="1" data-label="Who moderates"></textarea>
+    </div>
+
+    <div class="q">
+      <div class="head"><span class="id">G2</span><span class="ask">How many hours a day can that
+        realistically be covered?</span><span class="help">Helpful</span></div>
+      <div class="opts" data-q="G2" data-label="Moderation hours">
+        <label><input type="radio" name="G2" value="A couple of hours a day"><span>A couple of hours a day</span></label>
+        <label><input type="radio" name="G2" value="Roughly a full working day"><span>Roughly a full working day</span></label>
+        <label><input type="radio" name="G2" value="Extended hours, more than one person"><span>Extended hours, more than one person</span></label>
+        <label><input type="radio" name="G2" value="Haven't thought about it yet"><span>Haven't thought about it yet</span></label>
+      </div>
+    </div>
+
+    <div class="q">
+      <div class="head"><span class="id">G3</span><span class="ask">Who answers customer emails and
+        refund requests?</span><span class="help">Helpful</span></div>
+      <textarea data-q="G3" data-label="Customer support"></textarea>
+    </div>
+  </div>
+
+  <!-- H -->
+  <div class="group">
+    <header>
+      <h3>H · Artwork still outstanding</h3>
+      <p class="why">Small things, but they're the difference between a site that looks finished and one
+        that looks nearly finished. We've asked for some of these before.</p>
+    </header>
+
+    <div class="q">
+      <div class="head"><span class="id">H1</span><span class="ask">Can you supply the hero artwork
+        without text baked into it?</span><span class="help">Helpful</span></div>
+      <p class="sub">Your posters have headlines, small print and a button painted into the image, so
+        they can't reflow on a phone or be corrected. We rebuild the text in HTML over clean art — we
+        just need the clean art.</p>
+      <div class="opts" data-q="H1" data-label="Text-free hero art">
+        <label><input type="radio" name="H1" value="Yes — I can get text-free versions"><span>Yes — I can get text-free versions</span></label>
+        <label><input type="radio" name="H1" value="No — these are all I have"><span>No — these are all I have</span></label>
+        <label><input type="radio" name="H1" value="Happy for you to commission new art"><span>Happy for you to commission new art</span></label>
+      </div>
+    </div>
+
+    <div class="q">
+      <div class="head"><span class="id">H2</span><span class="ask">Are there four different hero images,
+        or is it the same one everywhere?</span><span class="help">Helpful</span></div>
+      <p class="sub">Home, the e-books page, the awards page and the campaign page currently all use the
+        same picture with a different headline. It's the four biggest moments on the site.</p>
+      <textarea data-q="H2" data-label="Hero image variety"></textarea>
+    </div>
+
+    <div class="q">
+      <div class="head"><span class="id">H3</span><span class="ask">Can we get a proper Gals emblem to
+        match the Blokes crest?</span><span class="help">Helpful</span></div>
+      <p class="sub">On the About page they sit side by side at the same size — one is a photographic
+        crest, the other a flat line drawing. On a product built on the two divisions being equal, it
+        reads as a missing asset.</p>
+      <div class="opts" data-q="H3" data-label="Gals emblem">
+        <label><input type="radio" name="H3" value="Yes — I'll supply one"><span>Yes — I'll supply one</span></label>
+        <label><input type="radio" name="H3" value="Please commission one"><span>Please commission one</span></label>
+        <label><input type="radio" name="H3" value="Leave as is"><span>Leave as is</span></label>
+      </div>
+    </div>
+
+    <div class="q">
+      <div class="head"><span class="id">H4</span><span class="ask">The two campaign adverts never
+        arrived — can you re-send them?</span><span class="help">Helpful</span></div>
+      <p class="sub">The Drive links returned a sign-in page. Attachments work best.</p>
+      <div class="opts" data-q="H4" data-label="Campaign adverts">
+        <label><input type="radio" name="H4" value="Yes — I'll attach them"><span>Yes — I'll attach them</span></label>
+        <label><input type="radio" name="H4" value="They no longer exist"><span>They no longer exist</span></label>
+      </div>
+    </div>
+
+    <div class="q">
+      <div class="head"><span class="id">H5</span><span class="ask">Anything else you want to tell
+        us?</span><span class="help">Helpful</span></div>
+      <textarea data-q="H5" data-label="Anything else" placeholder="Anything we haven't asked about, or anything in the prototype you'd change."></textarea>
+    </div>
+  </div>
+
+  <div class="export">
+    <h3>Send us your answers</h3>
+    <p class="note">Nothing leaves this page until you press Send. Your answers save in this browser as
+      you go, so you can come back and finish later — but only on this device, so do send them when
+      you're done.</p>
+
+    <div class="who">
+      <label>Your name
+        <input type="text" id="who-name" data-q="NAME" data-label="Name" autocomplete="name">
+      </label>
+      <label>Your email
+        <input type="text" id="who-email" data-q="EMAIL" data-label="Email" autocomplete="email"
+               inputmode="email" placeholder="So we can reply">
+      </label>
+    </div>
+
+    <input type="text" id="pot" tabindex="-1" autocomplete="off" aria-hidden="true" hidden>
+
+    <div class="btnrow">
+      <button type="button" id="send">Send my answers</button>
+      <button type="button" class="ghost" id="collect">Copy them instead</button>
+      <button type="button" class="ghost" id="clear">Clear the form</button>
+    </div>
+
+    <p id="msg" role="status" aria-live="polite"></p>
+
+    <div id="fallback" hidden>
+      <p class="note">Select everything below, copy it, and paste it into an email to us.</p>
+      <textarea id="out" readonly placeholder="Your answers will appear here."></textarea>
+    </div>
+  </div>
+</section>
+
+<section id="risks">
+  <div class="sechead">
+    <div class="eyebrow">Part two</div>
+    <h2>What you need from us</h2>
+    <p>The honest account. Some of this is expensive, some of it is legal, and a couple of items are
+      problems in your own numbers that we'd rather point out than quietly work around. Nothing here
+      says don't do it. It says do it with the costs visible.</p>
+  </div>
+
+  <div class="risks">
+
+    <div class="risk">
+      <p class="tagline">Risk 1 · Taking payments</p>
+      <h3>Mainstream payment processors won't handle adult content</h3>
+      <p>Stripe, PayPal and the usual providers exclude it. That pushes you to specialist high-risk
+        processors, where the realistic picture is fees around <strong>8–15% of revenue</strong> instead
+        of about 3%, setup fees, and a <strong>rolling reserve</strong> — typically 5–10% of your takings
+        held back for around six months.</p>
+      <p>The reserve matters more than the rate. It withholds money precisely when a new business needs
+        it most. Approval also isn't automatic: applications are underwritten over weeks and can be
+        declined outright, which is why we'd want to start that conversation before building the
+        membership system rather than after.</p>
+    </div>
+
+    <div class="risk">
+      <p class="tagline">Risk 2 · Who's allowed in</p>
+      <h3>Age verification is now the law in several of your best markets</h3>
+      <p>The UK requires robust age checks for adult content and enforces it with turnover-based fines.
+        Around nineteen US states have their own verification laws, upheld by the US Supreme Court in
+        2025. Australia is moving the same way. New Zealand is less prescriptive, but content judged
+        objectionable here is a criminal matter and that judgement isn't yours to make.</p>
+      <p>Practically: checks are bought from a specialist vendor and charged <strong>per person
+        verified</strong>. That means free signup isn't viable — verification has to sit behind a
+        payment, or automated signups run up a bill for nothing. It's also why we'd rather launch in one
+        or two countries and expand deliberately.</p>
+    </div>
+
+    <div class="risk">
+      <p class="tagline">Risk 3 · The videos</p>
+      <h3>Consent and identity records for everyone who appears, not just the entrant</h3>
+      <p>Since 2020 the card networks have required adult platforms to hold verified ID and recorded
+        consent for <em>every person</em> appearing in <em>every clip</em>, with a way to withdraw that
+        consent later. In New Zealand, publishing an intimate image without consent is a criminal
+        offence, and a platform's protection depends on having a genuine complaints process and acting
+        on it quickly.</p>
+      <p>The consequence for the build: <strong>every video must be watched by a person before it
+        appears publicly</strong>. Not spot-checked — all of them. Your operational outline already
+        anticipates this with a moderation queue and the privacy-editing service, which is genuinely
+        ahead of where most people start. What isn't yet in your plan is the cost of the people who do
+        the watching.</p>
+    </div>
+
+    <div class="risk">
+      <p class="tagline">Risk 4 · Ongoing cost</p>
+      <h3>Storage and streaming grow when the platform succeeds</h3>
+      <p>Your revenue model doesn't include them. Video is stored permanently and served repeatedly, and
+        your dual-submission design — a private original plus the privacy-edited public version — stores
+        two copies of everything, which is the right design and twice the bill.</p>
+      <p>These costs rise with popularity, so they're at their worst in the scenario you're hoping for.
+        They should be modelled at ten times your plan, not at your plan.</p>
+    </div>
+
+    <div class="risk">
+      <p class="tagline">Risk 5 · The numbers</p>
+      <h3>Two arithmetic points in your revenue model</h3>
+      <p>Said plainly because it's more useful than being polite about it. Your projection uses
+        <strong>$45</strong> for Blokes Expert; your own store now charges <strong>$30</strong>, which
+        roughly halves that side of the forecast. And the GST line is deducted from a different figure
+        than the one it's calculated against.</p>
+      <p>Neither is fatal, and the concept can still work at the corrected numbers — but the corrected
+        numbers are the ones to plan with, and we'd rather rebuild the model with you than hand you a
+        website built on the optimistic version.</p>
+    </div>
+
+    <div class="risk">
+      <p class="tagline">Risk 6 · Rules and prizes</p>
+      <h3>A competition with a $4,000 prize needs a lawyer's eye</h3>
+      <p>Prize competitions sit differently in law depending on whether the outcome turns on skill or on
+        chance. Judged against published criteria reads as skill; heavily weighted public voting muddies
+        exactly that line. It's worth a short opinion from a New Zealand lawyer before the rules are
+        published rather than after.</p>
+      <p>Assume, too, that someone will try to rig the public vote. With money and a trophy attached,
+        they always do, and the defences have to be designed in rather than bolted on.</p>
+    </div>
+
+    <div class="risk">
+      <p class="tagline">Risk 7 · Documents</p>
+      <h3>The legal library needs a real lawyer, not our placeholders</h3>
+      <p>Your own outline puts the legal documents at the top of the pre-launch list, and you were right
+        to. The prototype contains all twenty-one of them with the right structure and headings — which
+        is a genuinely useful head start, and most of what a lawyer would otherwise charge you to work
+        out — but the words are ours and they are placeholders. Terms, privacy policy, competition rules,
+        consent forms and the takedown policy all need drafting or reviewing properly.</p>
+    </div>
+
+    <div class="risk">
+      <p class="tagline">Risk 8 · Time</p>
+      <h3>The full platform is a year of work, and not all of it is ours to speed up</h3>
+      <p>Building all of it — shop, memberships, verification, video, competition, admin — is realistically
+        ten to fourteen months. A meaningful part of that isn't development at all: merchant applications
+        take weeks, legal drafting takes weeks, security testing takes weeks, and they happen on other
+        people's calendars.</p>
+      <p>Which is the argument for staging. The e-book shop can be trading in a couple of months and
+        earning while the rest is built, and each stage gives you a real decision point rather than one
+        long act of faith.</p>
+    </div>
+
+    <div class="risk good">
+      <p class="tagline">And in fairness</p>
+      <h3>What's genuinely strong here</h3>
+      <p>The concept holds together better than most things at this stage. Your operational outline is
+        unusually complete — thirty-five sections covering things most people don't think about until
+        something goes wrong — and the dual-submission privacy model is the most original idea in it.
+        The prototype exists because there was enough substance to build one from.</p>
+      <p>None of the risks above is unusual for this kind of platform. They're the standard cost of
+        doing it properly, and they're all knowable in advance. That's the point of asking now.</p>
+    </div>
+
+  </div>
+</section>
+
+<section id="next">
+  <div class="sechead">
+    <div class="eyebrow">Part three</div>
+    <h2>What happens next</h2>
+  </div>
+  <div class="flow">
+    <ol>
+      <li><strong>You send back the answers</strong> — the essential ones at minimum.</li>
+      <li><strong>We price it properly.</strong> With your answer to section A we can get real quotes for
+        payment processing, age verification and video hosting, rather than ranges. Those quotes take a
+        few weeks to come back, so the sooner they're requested the better.</li>
+      <li><strong>We agree what gets built first</strong>, and what it costs you.</li>
+      <li><strong>Then we start.</strong> Nothing gets built on a guess.</li>
+    </ol>
+    <p>If any of the questions are hard to answer, that's useful information too — say so rather than
+      guessing. A question you can't answer yet is a decision we can help you make.</p>
+  </div>
+</section>
+
+<div class="foot">
+  <p class="note">Prepared alongside the Appendage Antics prototype and its guided tour.
+    The legal and cost points above are our current understanding and are given in good faith to help you
+    plan — they aren't legal or financial advice, and the specific figures need confirming with the
+    relevant providers and a New Zealand lawyer before you rely on them.</p>
+</div>
+
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  var KEY = 'aa-prebuild-answers-v1';
+  var fields = Array.prototype.slice.call(document.querySelectorAll('[data-q]'));
+
+  function store(obj) {
+    try { window.localStorage.setItem(KEY, JSON.stringify(obj)); } catch (e) {}
+  }
+  function load() {
+    try {
+      var raw = window.localStorage.getItem(KEY);
+      if (raw) { return JSON.parse(raw); }
+    } catch (e) {}
+    return {};
+  }
+
+  function valueOf(el) {
+    if (el.tagName === 'TEXTAREA' || el.tagName === 'INPUT') { return el.value.trim(); }
+    var multi = el.getAttribute('data-multi');
+    var picked = el.querySelectorAll('input:checked');
+    var vals = [];
+    Array.prototype.forEach.call(picked, function (p) { vals.push(p.value); });
+    if (multi) { return vals.join(', '); }
+    return vals.length ? vals[0] : '';
+  }
+
+  function setValue(el, val) {
+    if (!val) { return; }
+    if (el.tagName === 'TEXTAREA' || el.tagName === 'INPUT') { el.value = val; return; }
+    var wanted = val.split(', ');
+    Array.prototype.forEach.call(el.querySelectorAll('input'), function (inp) {
+      if (wanted.indexOf(inp.value) !== -1) { inp.checked = true; }
+    });
+  }
+
+  function snapshot() {
+    var obj = {};
+    fields.forEach(function (el) {
+      var v = valueOf(el);
+      if (v) { obj[el.getAttribute('data-q')] = v; }
+    });
+    return obj;
+  }
+
+  var doneEl = document.getElementById('done');
+  var totalEl = document.getElementById('total');
+  var barEl = document.getElementById('bar');
+  var essentials = fields.filter(function (el) { return el.getAttribute('data-essential'); });
+  totalEl.textContent = String(essentials.length);
+
+  function refresh() {
+    var n = 0;
+    essentials.forEach(function (el) { if (valueOf(el)) { n += 1; } });
+    doneEl.textContent = String(n);
+    barEl.style.width = (essentials.length ? (n / essentials.length) * 100 : 0) + '%';
+  }
+
+  var saved = load();
+  fields.forEach(function (el) { setValue(el, saved[el.getAttribute('data-q')]); });
+  refresh();
+
+  document.addEventListener('input', function () { store(snapshot()); refresh(); });
+  document.addEventListener('change', function () { store(snapshot()); refresh(); });
+
+  var ENDPOINT = 'https://formspree.io/f/mrpgqllv';
+
+  var out = document.getElementById('out');
+  var msg = document.getElementById('msg');
+  var fallback = document.getElementById('fallback');
+  var sendBtn = document.getElementById('send');
+  var card = document.querySelector('.export');
+
+  function say(text, cls) {
+    msg.textContent = text;
+    msg.className = cls || '';
+  }
+
+  /* Typographic punctuation reads well on the page but survives poorly through
+     mail clients and dashboards. Everything we transmit gets folded to ASCII. */
+  function plain(s) {
+    return String(s)
+      .replace(/[‘’‚′]/g, "'")
+      .replace(/[“”„″]/g, '"')
+      .replace(/[–—]/g, '-')
+      .replace(/[·•]/g, '-')
+      .replace(/…/g, '...')
+      .replace(/ /g, ' ');
+  }
+
+  /* Build both shapes at once: a readable text block for the email body,
+     and one labelled field per answer so the dashboard is scannable. */
+  function build() {
+    var lines = ['APPENDAGE ANTICS - PRE-BUILD ANSWERS', ''];
+    var blank = [];
+    var payload = {};
+
+    fields.forEach(function (el) {
+      var id = el.getAttribute('data-q');
+      var label = el.getAttribute('data-label') || id;
+      var v = plain(valueOf(el));
+      if (v) {
+        if (id !== 'NAME' && id !== 'EMAIL') {
+          lines.push(id + '. ' + plain(label));
+          lines.push('    ' + v.split('\n').join('\n    '));
+          lines.push('');
+          payload[id + ' - ' + plain(label)] = v;
+        }
+      } else if (el.getAttribute('data-essential')) {
+        blank.push(id + ' - ' + plain(label));
+      }
+    });
+
+    if (blank.length) {
+      lines.push('STILL TO ANSWER (essential):');
+      blank.forEach(function (b) { lines.push('  - ' + b); });
+      lines.push('');
+    }
+
+    var name = document.getElementById('who-name').value.trim();
+    var email = document.getElementById('who-email').value.trim();
+
+    return {
+      text: lines.join('\n'),
+      answered: Object.keys(payload).length,
+      blank: blank,
+      name: name,
+      email: email,
+      payload: payload
+    };
+  }
+
+  function showCopy(built, note, cls) {
+    out.value = built.text;
+    fallback.hidden = false;
+    say(note, cls);
+    out.focus();
+    out.select();
+    if (window.navigator.clipboard && window.navigator.clipboard.writeText) {
+      window.navigator.clipboard.writeText(out.value).then(function () {
+        say(note + ' (It is already on your clipboard.)', cls);
+      }, function () {});
+    }
+  }
+
+  sendBtn.addEventListener('click', function () {
+    var built = build();
+
+    if (!built.answered) {
+      say('Nothing to send yet — answer a question or two first.', 'bad');
+      return;
+    }
+    if (!built.email) {
+      say('Please add your email above so we can reply.', 'bad');
+      document.getElementById('who-email').focus();
+      return;
+    }
+    if (document.getElementById('pot').value) { return; }
+
+    var body = {
+      _subject: 'Appendage Antics — pre-build answers' + (built.name ? ' from ' + built.name : ''),
+      name: built.name,
+      email: built.email,
+      Summary: built.text
+    };
+    Object.keys(built.payload).forEach(function (k) { body[k] = built.payload[k]; });
+    if (built.blank.length) { body['Still to answer'] = built.blank.join('; '); }
+
+    sendBtn.disabled = true;
+    say('Sending…', 'working');
+
+    window.fetch(ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify(body)
+    }).then(function (res) {
+      if (!res.ok) { throw new Error('rejected'); }
+      card.className = 'export sent';
+      card.querySelector('h3').textContent = 'Thank you — that came through';
+      say('Your answers are with us. We\'ll come back to you once we\'ve had a proper read.', '');
+      sendBtn.hidden = true;
+      fallback.hidden = true;
+    }).catch(function () {
+      sendBtn.disabled = false;
+      showCopy(built,
+        'That didn\'t send — the connection or a blocker got in the way. Nothing is lost: copy the text below and email it to us instead.',
+        'bad');
+    });
+  });
+
+  document.getElementById('collect').addEventListener('click', function () {
+    showCopy(build(), 'Ready — select it all and copy, then paste it into an email to us.', '');
+  });
+
+  document.getElementById('clear').addEventListener('click', function () {
+    fields.forEach(function (el) {
+      if (el.tagName === 'TEXTAREA' || el.tagName === 'INPUT') { el.value = ''; return; }
+      Array.prototype.forEach.call(el.querySelectorAll('input'), function (i) { i.checked = false; });
+    });
+    out.value = '';
+    fallback.hidden = true;
+    say('Form cleared.', '');
+    store({});
+    refresh();
+  });
+})();
+</script>
+</body>
+</html>
